@@ -204,7 +204,7 @@ public class Robo{
 		posicoes.add(6);
 		while(numAtaques > -1) //numAtaques pode variar entre 0 e 5
 		{
-			int posicaoAtaque = rand.nextInt(posicoes.size());
+			int posicaoAtaque = rand.nextInt(numAtaques);
 			if(posicoes.get(posicaoAtaque) < posicao)
 			{
 				travel(-200);
