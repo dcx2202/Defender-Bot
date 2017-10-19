@@ -1,5 +1,7 @@
 package PacoteJava;
 
+import java.util.TreeMap;
+
 import lejos.hardware.Button;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
@@ -28,6 +30,8 @@ public class Robo {
 	//VIDA RECUPERADA
 	int vidaRecuperadaCura1, vidaRecuperadaCura2, vidaRecuperadaCura3;
 	
+	TreeMap<Integer, Object> inimigos;
+	
 	EV3ColorSensor colorSensor;
 	SampleProvider colorProvider;
 	float[] colorSample;
@@ -39,6 +43,10 @@ public class Robo {
 	{
 		energiaRobo = 500;
 		vidaRobo = 750;
+		
+		inimigos = new TreeMap<Integer, Object>();
+		
+		
 	}
 	
 	
@@ -76,7 +84,10 @@ public class Robo {
 			if (currentDetectedColor == Color.RED) {
 				System.out.println("       RED       ");
 				System.out.println("-----------------");
-				travelStop();
+				
+				if(inimigos.size() >= 6)
+					travelStop();
+				
 				Delay.msDelay(3000);
 			}
 			//----------------
@@ -87,7 +98,14 @@ public class Robo {
 				travelStop();
 				System.out.println("    ARTILHARIA   ");
 				System.out.println("-----------------");
+				
 				Delay.msDelay(3000);
+				
+				if(inimigos.size() < 6)
+				{
+					inimigos.put(1, new Artilharia());
+					travel();
+				}
 			}
 			
 			
@@ -96,7 +114,14 @@ public class Robo {
 				travelStop();
 				System.out.println("      TANQUE     ");
 				System.out.println("-----------------");
+				
 				Delay.msDelay(3000);
+				
+				if(inimigos.size() < 6)
+				{
+					inimigos.put(1, new Tanque());
+					travel();
+				}
 			}
 			
 			
@@ -105,12 +130,19 @@ public class Robo {
 				travelStop();
 				System.out.println("    INFANTARIA   ");
 				System.out.println("-----------------");
+				
 				Delay.msDelay(3000);
+				
+				if(inimigos.size() < 6)
+				{
+					inimigos.put(1, new Infantaria());
+					travel();
+				}
 			}
 			else
 				travel();
 		}
-		colorSensor.close();
+		//colorSensor.close();
 	}
 	
 	public void sinaisVitaisRoboVida() 

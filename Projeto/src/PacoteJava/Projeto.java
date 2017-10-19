@@ -1,22 +1,19 @@
 package PacoteJava;
 
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.hardware.Button;
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.motor.Motor;
+/*import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.robotics.Color;
 import lejos.robotics.SampleProvider;
-import lejos.robotics.navigation.DifferentialPilot;
-import lejos.robotics.navigation.MovePilot;
-import lejos.robotics.chassis.*;
-import lejos.utility.Delay;
+//import lejos.robotics.navigation.DifferentialPilot;
+//import lejos.robotics.navigation.MovePilot;
+//import lejos.robotics.chassis.*;
+import lejos.utility.Delay;*/
 
 public class Projeto {
 
 	//DifferentialPilot pilot;
 	
-	MovePilot pilot;
+	//MovePilot pilot;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -34,10 +31,10 @@ public class Projeto {
 		Robo robo = new Robo();
 		
 		//pilot = new DifferentialPilot(1.5, 6, Motor.A, Motor.B);
-		Wheel wheel1 = WheeledChassis.modelWheel(Motor.A, 1.5); //.offset();
+		/*Wheel wheel1 = WheeledChassis.modelWheel(Motor.A, 1.5); //.offset();
 		Wheel wheel2 = WheeledChassis.modelWheel(Motor.B, 1.5); //.offset();
 		Chassis chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 }, WheeledChassis.TYPE_DIFFERENTIAL);
-		pilot = new MovePilot(chassis);
+		pilot = new MovePilot(chassis);*/
 		
 		robo.detetaCor();
 			
