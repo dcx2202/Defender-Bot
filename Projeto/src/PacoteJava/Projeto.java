@@ -9,12 +9,12 @@ import lejos.robotics.SampleProvider;
 //import lejos.robotics.chassis.*;
 import lejos.utility.Delay;*/
 
-public class Projeto {
+public class Projeto{
 
 	//DifferentialPilot pilot;
 	
 	//MovePilot pilot;
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
