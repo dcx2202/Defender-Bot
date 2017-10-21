@@ -91,6 +91,17 @@ public class Robo{
 		Motor.B.stop();
 	}
 	
+	public void returnHome()
+	{
+		while (posicao > 0)
+		{
+			if(detetaCor() == Color.RED)
+				posicao--;
+			travel(-200);
+		}
+		Delay.msDelay(1000); //testar timing
+		travelStop();
+	}
 	
 	//---------Detecoes-----------
 	
@@ -127,18 +138,18 @@ public class Robo{
 					Delay.msDelay(3000);
 					break;
 				}
-				Delay.msDelay(3000);
+				//Delay.msDelay(3000);
 			}
 			
 			//ARTILHARIA
 			else if (currentDetectedColor == Color.YELLOW) {
-				travelStop();
+				//travelStop();
 				LCD.clear(); //limpa o display
 				System.out.println("-----------------");
 				System.out.println("    ARTILHARIA   ");
 				System.out.println("-----------------");
 				
-				Delay.msDelay(3000);
+				//Delay.msDelay(3000);
 				
 				if(inimigos.size() < 6)
 				{
@@ -150,13 +161,13 @@ public class Robo{
 			
 			//TANQUE
 			else if (currentDetectedColor == Color.BLUE) {
-				travelStop();
+				//travelStop();
 				LCD.clear(); //limpa o display
 				System.out.println("-----------------");
 				System.out.println("      TANQUE     ");
 				System.out.println("-----------------");
 				
-				Delay.msDelay(3000);
+				//Delay.msDelay(3000);
 				
 				if(inimigos.size() < 6)
 				{
@@ -168,13 +179,13 @@ public class Robo{
 			
 			//INFANTARIA
 			else if (currentDetectedColor == Color.GREEN) {
-				travelStop();
+				//travelStop();
 				LCD.clear();
 				System.out.println("-----------------");
 				System.out.println("    INFANTARIA   ");
 				System.out.println("-----------------");
 				
-				Delay.msDelay(3000);
+				//Delay.msDelay(3000);
 				
 				if(inimigos.size() < 6)
 				{
@@ -207,7 +218,7 @@ public class Robo{
 			int posicaoAtaque = rand.nextInt(numAtaques);
 			if(posicoes.get(posicaoAtaque) < posicao)
 			{
-				travel(-200);
+				travel(-200); //ou 200 (experimentar)
 				while(posicoes.get(posicaoAtaque) != posicao)
 				{
 					if(detetaCor() == Color.RED);
@@ -218,7 +229,7 @@ public class Robo{
 			}
 			else if(posicoes.get(posicaoAtaque) > posicao)
 			{
-				travel(200);
+				travel(200); //ou -200 (experimentar)
 				while(posicoes.get(posicaoAtaque) != posicao)
 				{
 					if(detetaCor() == Color.RED);
