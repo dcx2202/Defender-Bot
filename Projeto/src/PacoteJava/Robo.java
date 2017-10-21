@@ -1,5 +1,6 @@
 package PacoteJava;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 import java.util.TreeMap;
@@ -51,6 +52,35 @@ public class Robo{
 	EV3ColorSensor colorSensor;
 	SampleProvider colorProvider;
 	float[] colorSample;
+	
+	//SONS (caso queiramos usa-los futuramente tem aqui bastantes)
+	static File som1 = new File("../../resources/som1.wav"); //"Coloque-me na posicao 1 e pressione o botao para comecar."
+	static File som2 = new File("../../resources/som2.wav"); //"Detecao de inimigos concluida."
+	static File som3 = new File("../../resources/som3.wav"); //"Voltando a posicao 1."
+	static File som4 = new File("../../resources/som4.wav"); //"Preparando-me para atacar."
+	static File som5 = new File("../../resources/som5.wav"); //"Energia"
+	static File som6 = new File("../../resources/som6.wav"); //"Vida"
+	static File som7 = new File("../../resources/som7.wav"); //"Preparando-me para defender."
+	static File som8 = new File("../../resources/som8.wav"); //"Inimigo abatido."
+	static File som9 = new File("../../resources/som9.wav"); //"Vida a 0. Fim do jogo!"
+	static File som10 = new File("../../resources/som10.wav"); //"Comecando o jogo."
+	static File som11 = new File("../../resources/som11.wav"); //"Vitoria! Todos os inimigos abatidos. Fim do jogo!"
+	static File som12 = new File("../../resources/som12.wav"); //"Vida perdida"
+	static File som13 = new File("../../resources/som13.wav"); //"Vida recuperada"
+	static File som14 = new File("../../resources/som14.wav"); //"Energia gasta"
+	static File som15 = new File("../../resources/som15.wav"); //"Energia recuperada"
+	static File som16 = new File("../../resources/som16.wav"); //"Detetando inimigos"
+	
+	//USAR PARA SOLETRAR QUALQUER NUMERO
+	static File um = new File("../../resources/um.wav"); //"um"
+	static File dois = new File("../../resources/dois.wav"); //"dois"
+	static File tres = new File("../../resources/tres.wav"); //"tres"
+	static File quatro = new File("../../resources/quatro.wav"); //"quatro"
+	static File cinco = new File("../../resources/cinco.wav"); //"cinco"
+	static File seis = new File("../../resources/seis.wav"); //"seis"
+	static File sete = new File("../../resources/sete.wav"); //"sete"
+	static File oito = new File("../../resources/oito.wav"); //"oito"
+	static File nove = new File("../../resources/nove.wav"); //"nove"
 	
 	//------ Construtor ------
 	
