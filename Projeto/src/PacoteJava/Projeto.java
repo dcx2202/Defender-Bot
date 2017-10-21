@@ -60,6 +60,7 @@ public class Projeto{
 		//enquanto o botao nao for pressionado continua a espera
 		while(touchSample[0] == 0)
 		{
+			touchProvider.fetchSample(touchSample, 0);
 			Delay.msDelay(100);
 		}
 		
