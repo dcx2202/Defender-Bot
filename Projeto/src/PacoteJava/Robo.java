@@ -153,7 +153,7 @@ public class Robo{
 				System.out.println("       RED       ");
 				System.out.println("-----------------");
 				posicao++; //usado para saber em que parte do tabuleiro se encontra
-				
+				Delay.msDelay(500);
 				if(posicao == 5)
 				{
 					Delay.msDelay(1000);
@@ -187,6 +187,7 @@ public class Robo{
 					numArtilharias++;
 					travel(200);
 				}
+				Delay.msDelay(500);
 			}
 			
 			//TANQUE
@@ -205,6 +206,7 @@ public class Robo{
 					numTanques++;
 					travel(200);
 				}
+				Delay.msDelay(500);
 			}
 			
 			//INFANTARIA
@@ -223,6 +225,7 @@ public class Robo{
 					numInfantarias++;
 					travel(200);
 				}
+				Delay.msDelay(500);
 			}
 			else
 				travel(200);

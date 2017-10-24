@@ -3,6 +3,7 @@ package PacoteJava;
 import java.io.File;
 
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
@@ -30,7 +31,7 @@ public class Projeto{
 	static Port s2 = LocalEV3.get().getPort("S2");
 	static EV3TouchSensor touchSensor = new EV3TouchSensor(s2);
 	static SampleProvider touchProvider = touchSensor.getTouchMode();
-	static float[] touchSample;
+	static float[] touchSample = new float[touchProvider.sampleSize()];
 	
 	public Projeto() 
 	{
@@ -58,11 +59,8 @@ public class Projeto{
 		touchProvider.fetchSample(touchSample, 0);
 		
 		//enquanto o botao nao for pressionado continua a espera
-		while(touchSample[0] == 0)
-		{
-			touchProvider.fetchSample(touchSample, 0);
+		while(!isTouched())
 			Delay.msDelay(100);
-		}
 		
 		Robo robo = new Robo();
 		Sound.playSample(Robo.som16); //"Detetando inimigos"
@@ -73,8 +71,15 @@ public class Projeto{
 		robo.returnHome();
 		Sound.playSample(Robo.som4); //"Preparando-me para atacar."
 		robo.ataca();
+		touchSensor.close();
 	}
 	// -----------------------------------------------
+	
+	public static boolean isTouched()
+	{
+		touchProvider.fetchSample(touchSample, 0);
+		return touchSample[0] != 0;
+	}
 	
 	public void sinaisVitaisTanqueVida() 
 	{
