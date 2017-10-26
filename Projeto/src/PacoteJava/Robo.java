@@ -115,6 +115,14 @@ public class Robo{
 		Motor.B.forward();
 	}
 	
+	public void travelBackward(int speed) 
+	{
+		Motor.A.setSpeed(speed);
+		Motor.B.setSpeed(speed);
+		Motor.A.backward();
+		Motor.B.backward();
+	}
+	
 	public void travelStop() 
 	{
 		Motor.A.stop();
@@ -123,13 +131,16 @@ public class Robo{
 	
 	public void returnHome()
 	{
+		travelBackward(400);
 		while (posicao > 0)
 		{
 			if(detetaCor() == Color.RED)
+			{
 				posicao--;
-			travel(-200);
+				Delay.msDelay(250);
+			}
 		}
-		Delay.msDelay(1000); //testar timing
+		Delay.msDelay(300); //testar timing
 		travelStop();
 	}
 	
@@ -153,10 +164,61 @@ public class Robo{
 				System.out.println("       RED       ");
 				System.out.println("-----------------");
 				posicao++; //usado para saber em que parte do tabuleiro se encontra
-				Delay.msDelay(500);
+				Delay.msDelay(1000);
 				if(posicao == 5)
 				{
-					Delay.msDelay(1000);
+					while(detetaCor() == 0)
+					{
+						Delay.msDelay(50);
+					}
+					if(detetaCor() == Color.YELLOW)
+					{
+						LCD.clear(); //limpa o display
+						System.out.println("-----------------");
+						System.out.println("    ARTILHARIA   ");
+						System.out.println("-----------------");
+						
+						//Delay.msDelay(3000);
+						
+						if(inimigos.size() < 6)
+						{
+							inimigos.put(posicao, new Artilharia());
+							numArtilharias++;
+							travel(200);
+						}
+					}
+					else if(detetaCor() == Color.BLUE)
+					{
+						LCD.clear(); //limpa o display
+						System.out.println("-----------------");
+						System.out.println("      TANQUE     ");
+						System.out.println("-----------------");
+						
+						//Delay.msDelay(3000);
+						
+						if(inimigos.size() < 6)
+						{
+							inimigos.put(posicao, new Tanque());
+							numTanques++;
+							travel(200);
+						}
+					}
+					else if(detetaCor() == Color.GREEN)
+					{
+						LCD.clear();
+						System.out.println("-----------------");
+						System.out.println("    INFANTARIA   ");
+						System.out.println("-----------------");
+						
+						//Delay.msDelay(3000);
+						
+						if(inimigos.size() < 6)
+						{
+							inimigos.put(posicao, new Infantaria());
+							numInfantarias++;
+							travel(200);
+						}
+					}
 					travelStop();
 					LCD.clear(); //limpa o display
 					System.out.println("-----------------");
@@ -230,7 +292,7 @@ public class Robo{
 			else
 				travel(200);
 		}
-		colorSensor.close();
+		//colorSensor.close();
 	}
 
 	

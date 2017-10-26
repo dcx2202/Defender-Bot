@@ -63,15 +63,17 @@ public class Projeto{
 			Delay.msDelay(100);
 		
 		Robo robo = new Robo();
-		Sound.playSample(Robo.som16); //"Detetando inimigos"
+		//Sound.playSample(Robo.som16); //"Detetando inimigos"
 		robo.detetaInimigos();
-		Sound.playSample(Robo.som2); //"Detecao de inimigos concluida."
-		Delay.msDelay(1000);
-		Sound.playSample(Robo.som3); //"Voltando a posicao 1."
+		//Sound.playSample(Robo.som2); //"Detecao de inimigos concluida."
+		//Delay.msDelay(1000);
+		//Sound.playSample(Robo.som3); //"Voltando a posicao 1."
 		robo.returnHome();
-		Sound.playSample(Robo.som4); //"Preparando-me para atacar."
-		robo.ataca();
+		//Sound.playSample(Robo.som4); //"Preparando-me para atacar."
+		//robo.posicao = 3;
+		//robo.ataca();
 		touchSensor.close();
+		robo.colorSensor.close();
 	}
 	// -----------------------------------------------
 	
