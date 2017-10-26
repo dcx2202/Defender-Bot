@@ -125,8 +125,8 @@ public class Robo{
 	
 	public void travelStop() 
 	{
-		Motor.A.stop();
-		Motor.B.stop();
+		Motor.A.stop(true);
+		Motor.B.stop(true);
 	}
 	
 	public void returnHome()
