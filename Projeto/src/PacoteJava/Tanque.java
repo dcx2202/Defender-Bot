@@ -6,7 +6,7 @@ public class Tanque {
 	
 	public Tanque()
 	{
-		vidaTanque = 200;
+		vidaTanque = 200; //uv
 	}
 	
 	public int getImpacto(int forca, int vida, int vidaAtual) 

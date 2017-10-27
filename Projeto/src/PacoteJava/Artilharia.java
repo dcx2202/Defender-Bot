@@ -6,7 +6,7 @@ public class Artilharia {
 	
 	public Artilharia()
 	{
-		vidaArtilharia = 50;
+		vidaArtilharia = 50; //uv
 	}
 	
 	public int getImpacto(int forca, int vida, int vidaAtual) 

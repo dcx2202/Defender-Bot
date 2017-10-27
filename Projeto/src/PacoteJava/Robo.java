@@ -82,10 +82,12 @@ public class Robo{
 	static File oito = new File("/home/root/oito.wav"); //"oito"
 	static File nove = new File("/home/root/nove.wav"); //"nove"
 	
+	
+	
+	
 	//------ Construtor ------
 	
-	public Robo()
-	{
+	public Robo(){
 		//Inicializacao de variaveis
 		energiaRobo = 500;
 		vidaRobo = 750;
@@ -95,7 +97,7 @@ public class Robo{
 		numTanques = 0;
 						   //  ___ ___ ___ ___ ___ ___
 						   // | 0 | 1 | 2 | 3 | 4 | 5 |
-		posicao =  0;      // |___|___|___|___|___|___|
+		posicao =  0;      //  |___|___|___|___|___|___|
 	    
 		//Define a porta do sensor de cor
 		Port s1 = LocalEV3.get().getPort("S1");
@@ -134,7 +136,8 @@ public class Robo{
 		travelBackward(400);
 		while (posicao > 0)
 		{
-			if(detetaCor() == Color.RED)
+			if(detetaCor() == Color.RED)  //vermelho separa os slots
+				
 			{
 				posicao--;
 				Delay.msDelay(250);
@@ -151,6 +154,10 @@ public class Robo{
 		return colorSensor.getColorID();
 	}
 	
+	
+	
+	
+	
 	public void detetaInimigos()
 	{
 		while(Button.ESCAPE.isUp()) 
@@ -161,7 +168,7 @@ public class Robo{
 			if (currentDetectedColor == Color.RED) {
 				LCD.clear(); //limpa o display
 				System.out.println("\n\n-----------------");
-				System.out.println("       RED       ");
+				System.out.println("    NOVO SLOT    ");
 				System.out.println("-----------------");
 				posicao++; //usado para saber em que parte do tabuleiro se encontra
 				Delay.msDelay(1000);
@@ -171,6 +178,7 @@ public class Robo{
 					{
 						Delay.msDelay(50);
 					}
+					
 					if(detetaCor() == Color.YELLOW)
 					{
 						LCD.clear(); //limpa o display
@@ -216,10 +224,12 @@ public class Robo{
 							numInfantarias++;
 						}
 					}
+					
+					
 					travelStop();
 					LCD.clear(); //limpa o display
 					System.out.println("-----------------");
-					System.out.println("Inimigos Detetados");
+					System.out.println("     Inimigos    ");
 					System.out.println("-----------------\n");
 					System.out.println(numArtilharias + " Artilharias");
 					System.out.println(numInfantarias + " Infantarias");
@@ -229,6 +239,9 @@ public class Robo{
 				}
 				//Delay.msDelay(3000);
 			}
+			
+			
+			
 			
 			//ARTILHARIA
 			else if (currentDetectedColor == Color.YELLOW) {
@@ -249,6 +262,11 @@ public class Robo{
 				Delay.msDelay(500);
 			}
 			
+			
+			
+			
+			
+			
 			//TANQUE
 			else if (currentDetectedColor == Color.BLUE) {
 				//travelStop();
@@ -267,6 +285,13 @@ public class Robo{
 				}
 				Delay.msDelay(500);
 			}
+			
+			
+			
+			
+			
+			
+			
 			
 			//INFANTARIA
 			else if (currentDetectedColor == Color.GREEN) {
@@ -292,6 +317,11 @@ public class Robo{
 		//colorSensor.close();
 	}
 
+	
+	
+	
+	
+	
 	
 	//----------Ataques-----------
 	@SuppressWarnings("null")
@@ -345,6 +375,9 @@ public class Robo{
 		}
 	}
 	
+	
+	
+	
 	public void ataqueSom()
 	{
 		Sound.beepSequenceUp();
@@ -352,6 +385,9 @@ public class Robo{
 		
 		//remover vida e energia do inimigo e do robo
 	}
+	
+	
+	
 	
 	public void ataqueToque()
 	{
@@ -367,6 +403,10 @@ public class Robo{
 		
 		//remover vida e energia do inimigo e do robo
 	}
+	
+	
+	
+	
 	
 	public void ataqueGrua()
 	{
@@ -384,11 +424,16 @@ public class Robo{
 	}
 	
 	
+	
+	
+	
 	//----------Defesa------------
 	public void defende()
 	{
 		
 	}
+	
+	
 	
 	
 	public void sinaisVitaisRoboVida() 

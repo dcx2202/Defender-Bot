@@ -42,6 +42,11 @@ public class Projeto{
 		pilot = new MovePilot(chassis);*/
 	}
 	
+	
+	
+	
+	
+	//------- MAIN -------------------------------------------------------------------
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
@@ -54,7 +59,7 @@ public class Projeto{
 		//new Projeto();
 		
 		LCD.clear();
-		System.out.println("Coloque-me na posição 1 e pressione o botão para começar.");
+		System.out.println("Coloca-me na 1º posicao e pressiona o botão para comecar.");
 		Sound.playSample(Robo.som1, 100);
 		touchProvider.fetchSample(touchSample, 0);
 		
@@ -75,6 +80,9 @@ public class Projeto{
 		touchSensor.close();
 		robo.colorSensor.close();
 	}
+	
+	
+	
 	// -----------------------------------------------
 	
 	public static boolean isTouched()
