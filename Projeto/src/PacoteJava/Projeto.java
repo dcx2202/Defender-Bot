@@ -55,7 +55,7 @@ public class Projeto{
 		
 		LCD.clear();
 		System.out.println("Coloque-me na posição 1 e pressione o botão para começar.");
-		Sound.playSample(Robo.som1);
+		Sound.playSample(Robo.som1, 100);
 		touchProvider.fetchSample(touchSample, 0);
 		
 		//enquanto o botao nao for pressionado continua a espera
@@ -63,14 +63,14 @@ public class Projeto{
 			Delay.msDelay(100);
 		
 		Robo robo = new Robo();
-		//Sound.playSample(Robo.som16); //"Detetando inimigos"
+		Sound.playSample(Robo.som16, 100); //"Detetando inimigos"
 		robo.detetaInimigos();
-		//Sound.playSample(Robo.som2); //"Detecao de inimigos concluida."
+		Sound.playSample(Robo.som2, 100); //"Detecao de inimigos concluida."
 		//Delay.msDelay(1000);
-		//Sound.playSample(Robo.som3); //"Voltando a posicao 1."
+		Sound.playSample(Robo.som3, 100); //"Voltando a posicao 1."
 		robo.returnHome();
-		//Sound.playSample(Robo.som4); //"Preparando-me para atacar."
-		//robo.posicao = 3;
+		Sound.playSample(Robo.som4, 100); //"Preparando-me para atacar."
+		robo.posicao = 3;
 		//robo.ataca();
 		touchSensor.close();
 		robo.colorSensor.close();

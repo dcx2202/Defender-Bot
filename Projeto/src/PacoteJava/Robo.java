@@ -54,33 +54,33 @@ public class Robo{
 	float[] colorSample;
 	
 	//SONS (caso queiramos usa-los futuramente tem aqui bastantes)
-	static File som1 = new File("../../resources/som1.wav"); //"Coloque-me na posicao 1 e pressione o botao para comecar."
-	static File som2 = new File("../../resources/som2.wav"); //"Detecao de inimigos concluida."
-	static File som3 = new File("../../resources/som3.wav"); //"Voltando a posicao 1."
-	static File som4 = new File("../../resources/som4.wav"); //"Preparando-me para atacar."
-	static File som5 = new File("../../resources/som5.wav"); //"Energia"
-	static File som6 = new File("../../resources/som6.wav"); //"Vida"
-	static File som7 = new File("../../resources/som7.wav"); //"Preparando-me para defender."
-	static File som8 = new File("../../resources/som8.wav"); //"Inimigo abatido."
-	static File som9 = new File("../../resources/som9.wav"); //"Vida a 0. Fim do jogo!"
-	static File som10 = new File("../../resources/som10.wav"); //"Comecando o jogo."
-	static File som11 = new File("../../resources/som11.wav"); //"Vitoria! Todos os inimigos abatidos. Fim do jogo!"
-	static File som12 = new File("../../resources/som12.wav"); //"Vida perdida"
-	static File som13 = new File("../../resources/som13.wav"); //"Vida recuperada"
-	static File som14 = new File("../../resources/som14.wav"); //"Energia gasta"
-	static File som15 = new File("../../resources/som15.wav"); //"Energia recuperada"
-	static File som16 = new File("../../resources/som16.wav"); //"Detetando inimigos"
+	static File som1 = new File("/home/root/som1.wav"); //"Coloque-me na posicao 1 e pressione o botao para comecar."
+	static File som2 = new File("/home/root/som2.wav"); //"Detecao de inimigos concluida."
+	static File som3 = new File("/home/root/som3.wav"); //"Voltando a posicao 1."
+	static File som4 = new File("/home/root/som4.wav"); //"Preparando-me para atacar."
+	static File som5 = new File("/home/root/som5.wav"); //"Energia"
+	static File som6 = new File("/home/root/som6.wav"); //"Vida"
+	static File som7 = new File("/home/root/som7.wav"); //"Preparando-me para defender."
+	static File som8 = new File("/home/root/som8.wav"); //"Inimigo abatido."
+	static File som9 = new File("/home/root/som9.wav"); //"Vida a 0. Fim do jogo!"
+	static File som10 = new File("/home/root/som10.wav"); //"Comecando o jogo."
+	static File som11 = new File("/home/root/som11.wav"); //"Vitoria! Todos os inimigos abatidos. Fim do jogo!"
+	static File som12 = new File("/home/root/som12.wav"); //"Vida perdida"
+	static File som13 = new File("/home/root/som13.wav"); //"Vida recuperada"
+	static File som14 = new File("/home/root/som14.wav"); //"Energia gasta"
+	static File som15 = new File("/home/root/som15.wav"); //"Energia recuperada"
+	static File som16 = new File("/home/root/som16.wav"); //"Detetando inimigos"
 	
 	//USAR PARA SOLETRAR QUALQUER NUMERO
-	static File um = new File("../../resources/um.wav"); //"um"
-	static File dois = new File("../../resources/dois.wav"); //"dois"
-	static File tres = new File("../../resources/tres.wav"); //"tres"
-	static File quatro = new File("../../resources/quatro.wav"); //"quatro"
-	static File cinco = new File("../../resources/cinco.wav"); //"cinco"
-	static File seis = new File("../../resources/seis.wav"); //"seis"
-	static File sete = new File("../../resources/sete.wav"); //"sete"
-	static File oito = new File("../../resources/oito.wav"); //"oito"
-	static File nove = new File("../../resources/nove.wav"); //"nove"
+	static File um = new File("/home/root/um.wav"); //"um"
+	static File dois = new File("/home/root/dois.wav"); //"dois"
+	static File tres = new File("/home/root/tres.wav"); //"tres"
+	static File quatro = new File("/home/root/quatro.wav"); //"quatro"
+	static File cinco = new File("/home/root/cinco.wav"); //"cinco"
+	static File seis = new File("/home/root/seis.wav"); //"seis"
+	static File sete = new File("/home/root/sete.wav"); //"sete"
+	static File oito = new File("/home/root/oito.wav"); //"oito"
+	static File nove = new File("/home/root/nove.wav"); //"nove"
 	
 	//------ Construtor ------
 	
@@ -140,7 +140,7 @@ public class Robo{
 				Delay.msDelay(250);
 			}
 		}
-		Delay.msDelay(300); //testar timing
+		Delay.msDelay(200); //testar timing
 		travelStop();
 	}
 	
@@ -184,7 +184,6 @@ public class Robo{
 						{
 							inimigos.put(posicao, new Artilharia());
 							numArtilharias++;
-							travel(200);
 						}
 					}
 					else if(detetaCor() == Color.BLUE)
@@ -200,7 +199,6 @@ public class Robo{
 						{
 							inimigos.put(posicao, new Tanque());
 							numTanques++;
-							travel(200);
 						}
 					}
 					else if(detetaCor() == Color.GREEN)
@@ -216,7 +214,6 @@ public class Robo{
 						{
 							inimigos.put(posicao, new Infantaria());
 							numInfantarias++;
-							travel(200);
 						}
 					}
 					travelStop();
