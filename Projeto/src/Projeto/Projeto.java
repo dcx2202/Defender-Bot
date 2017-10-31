@@ -1,19 +1,36 @@
 package Projeto;
 
-import lejos.hardware.Sound;
-import lejos.hardware.motor.Motor;
+import lejos.robotics.Color;
 
 public class Projeto {
 
+	//Criacao/Iniciacao de variaveis/objetos
+	Robo robo = new Robo();
+	
+	
+	//Main
 	public static void main(String[] args) 
 	{
-		// TODO Auto-generated method stub
-		Sound.beep();
-		Motor.A.setSpeed(400);
-		Motor.B.setSpeed(400);
-		while(true) {
-		Motor.A.forward();
-		Motor.B.forward();}
+		
+		
 	}
 
+	
+	//Metodos de jogo
+	public void inicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
+	{	
+		while(robo.detetaCor() != Color.WHITE)
+			robo.mover(-1, 400);
+		robo.parar();
+		robo.mover(1, 200);
+		robo.espera(1);
+		robo.parar();
+	}
+	
+	public void detetaInimigos()
+	{
+		
+	}
+	
+	
 }
