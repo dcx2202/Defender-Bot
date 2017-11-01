@@ -1,9 +1,6 @@
 package Projeto;
 
-import java.io.File;
-
 import Projeto.Robo;
-import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
@@ -26,6 +23,7 @@ public class Robo
 	private static final int danoToque = 100;
 	private int energAtual;
 	private int vidaAtual;
+	static int posicaoAtual;
 	private static final Port s1 = LocalEV3.get().getPort("S1");
 	private static final EV3ColorSensor sensorCor = new EV3ColorSensor(s1);
 	private static final Port s2 = LocalEV3.get().getPort("S2");
@@ -62,8 +60,9 @@ public class Robo
 	public void moverPos(int direcao, int numPosicoes) //Move-se na direcao especificada durante 1s para cada posicao
 	{
 		mover(direcao, 400);
-		espera(numPosicoes);
+		espera(numPosicoes * 1000);
 		parar();
+		posicaoAtual = posicaoAtual + (direcao * numPosicoes);
 	}
 	
 	public void parar() //Para ambos os motores simultaneamente
@@ -134,21 +133,19 @@ public class Robo
 	public void recebeDano(int valor)
 	{
 		if(vidaAtual-valor < 0)
+		{
 			vidaAtual = 0;
+			Projeto.fimJogo();
+		}
 		else
 			vidaAtual -=valor;
 	}
 	
 	
 	//Outros
-	public void espera(int segundos)
+	public void espera(int ms)
 	{
-		Delay.msDelay(segundos * 1000);
-	}
-	
-	public void tocaSom(String ficheiro)
-	{
-		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
+		Delay.msDelay(ms);
 	}
 	
 	

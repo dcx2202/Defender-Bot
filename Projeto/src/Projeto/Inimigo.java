@@ -12,10 +12,12 @@ public class Inimigo {
 	private int vidaMax;
 	private int forca;
 	private int id; //0-tanque, 1-artilharia, 2-infantaria;
+	int posicao;
 	
 	public Inimigo(int id)
 	{
 		this.id = id;
+		this.posicao = Robo.posicaoAtual;
 		
 		if (id == 0)
 		{
@@ -45,6 +47,11 @@ public class Inimigo {
 	public int getVida()
 	{
 		return vidaAtual;
+	}
+	
+	public int getPosicao()
+	{
+		return posicao;
 	}
 	
 	public void setVida(int valor)
