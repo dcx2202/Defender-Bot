@@ -6,6 +6,7 @@ import java.util.TreeMap;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.Color;
+import lejos.utility.Delay;
 
 public class Projeto {
 
@@ -25,7 +26,7 @@ public class Projeto {
 	public static void esperaToque()
 	{
 		while(!robo.detetaToque())
-			robo.espera(200);
+			espera(100);
 	}
 	
 	public static void fimJogo() 
@@ -61,6 +62,7 @@ public class Projeto {
 	{
 		tocaSom("som23"); //"Turno"
 		tocaSom(turno + ""); //"1, 2, 3, ..."
+		espera(1000);
 	}
 	
 	public static void novoJogo()
@@ -154,14 +156,14 @@ public class Projeto {
 		esperaToque();
 		detetaInimigos();
 		defender();
-		
 	}
 	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
 		tocaSom("som3"); //"Voltando a posicao 1"
+		robo.mover(-1, 400);
 		while(robo.detetaCor() != Color.WHITE)
-			robo.mover(-1, 400);
+			robo.espera(50);
 		robo.parar();
 		robo.mover(1, 200);
 		robo.espera(1);
@@ -199,9 +201,6 @@ public class Projeto {
 		tocaSom("som2"); //"Detecao de inimigos concluida"
 		imprimeInimigosDet(artilharias, infantarias, tanques);
 		voltarInicio();
-		
-		if(inimigos.isEmpty())
-			fimJogo();
 	}
 	
 	public static void atacar()
@@ -230,6 +229,11 @@ public class Projeto {
 	
 	
 	//Outros
+	public static void espera(int ms)
+	{
+		Delay.msDelay(ms);
+	}
+	
 	public static void informaDano(int vidaPerdida)
 	{
 		String numero = String.valueOf(vidaPerdida);
@@ -237,9 +241,11 @@ public class Projeto {
 		int i = 0; 
 		
 		tocaSom("som12");
+		espera(1000);
 		while(i < digitos.length - 1)
 		{
 			tocaSom(digitos[i] + "");
+			espera(500);
 			i++;
 		}
 	}
@@ -247,13 +253,16 @@ public class Projeto {
 	public static void informaAtaque(Inimigo inimigo)
 	{
 		tocaSom("som21");
+		espera(1000);
 		if(inimigo.getId() == 0)
 			tocaSom("som17");
 		else if(inimigo.getId() == 1)
 			tocaSom("som19");
 		else if(inimigo.getId() == 2)
 			tocaSom("som18");
+		espera(1000);
 		tocaSom("som22");
+		espera(1000);
 		tocaSom(Integer.toString(inimigo.getPosicao()));
 	}
 	
@@ -273,6 +282,7 @@ public class Projeto {
 	public static void tocaSom(String ficheiro)
 	{
 		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
+		espera(1000);
 	}
 	
 	public static void limpaEcra()
