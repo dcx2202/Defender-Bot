@@ -6,7 +6,6 @@ import java.util.TreeMap;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.Color;
-import lejos.utility.Delay;
 
 public class Projeto {
 
@@ -15,7 +14,7 @@ public class Projeto {
 	static TreeMap<Integer, Inimigo> inimigos = new TreeMap<>();
 	
 	//Main
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 		voltarInicio();
 		novoJogo();
@@ -26,10 +25,10 @@ public class Projeto {
 	public static void esperaToque()
 	{
 		while(!robo.detetaToque())
-			espera(100);
+			robo.espera(100);
 	}
 	
-	public static void fimJogo() 
+	public static void fimJogo()
 	{
 		if(robo.getVida() == 0)
 		{
@@ -62,7 +61,7 @@ public class Projeto {
 	{
 		tocaSom("som23"); //"Turno"
 		tocaSom(turno + ""); //"1, 2, 3, ..."
-		espera(1000);
+		robo.espera(1000);
 	}
 	
 	public static void novoJogo()
@@ -181,21 +180,26 @@ public class Projeto {
 		while(Robo.posicaoAtual < 6)
 		{
 			robo.moverPos(1, 1);
-			robo.parar();
-			if(robo.detetaCor() == Color.BLUE)
+			if(!inimigos.containsKey(Robo.posicaoAtual))
 			{
-				imprimeInimigo("Tanque");
-				tanques++;
-			}
-			else if(robo.detetaCor() == Color.GREEN)
-			{
-				imprimeInimigo("Infantaria");
-				infantarias++;
-			}
-			else if(robo.detetaCor() == Color.YELLOW)
-			{
-				imprimeInimigo("Artilharia");
-				artilharias++;
+				if(robo.detetaCor() == Color.BLUE)
+				{
+					imprimeInimigo("Tanque");
+					inimigos.put(Robo.posicaoAtual, new Inimigo(0));
+					tanques++;
+				}
+				else if(robo.detetaCor() == Color.GREEN)
+				{
+					imprimeInimigo("Infantaria");
+					inimigos.put(Robo.posicaoAtual, new Inimigo(2));
+					infantarias++;
+				}
+				else if(robo.detetaCor() == Color.YELLOW)
+				{
+					imprimeInimigo("Artilharia");
+					inimigos.put(Robo.posicaoAtual, new Inimigo(1));
+					artilharias++;
+				}
 			}
 		}
 		tocaSom("som2"); //"Detecao de inimigos concluida"
@@ -210,7 +214,7 @@ public class Projeto {
 		{
 			informaAtaque(inimigo);
 			robo.moverPos(1, inimigo.getPosicao());
-			escolheAtaque(inimigos.get(inimigos.firstKey()));
+			escolheAtaque(inimigo);
 		}
 		voltarInicio();
 	}
@@ -229,11 +233,6 @@ public class Projeto {
 	
 	
 	//Outros
-	public static void espera(int ms)
-	{
-		Delay.msDelay(ms);
-	}
-	
 	public static void informaDano(int vidaPerdida)
 	{
 		String numero = String.valueOf(vidaPerdida);
@@ -241,11 +240,9 @@ public class Projeto {
 		int i = 0; 
 		
 		tocaSom("som12");
-		espera(1000);
 		while(i < digitos.length - 1)
 		{
 			tocaSom(digitos[i] + "");
-			espera(500);
 			i++;
 		}
 	}
@@ -253,16 +250,13 @@ public class Projeto {
 	public static void informaAtaque(Inimigo inimigo)
 	{
 		tocaSom("som21");
-		espera(1000);
 		if(inimigo.getId() == 0)
 			tocaSom("som17");
 		else if(inimigo.getId() == 1)
 			tocaSom("som19");
 		else if(inimigo.getId() == 2)
 			tocaSom("som18");
-		espera(1000);
 		tocaSom("som22");
-		espera(1000);
 		tocaSom(Integer.toString(inimigo.getPosicao()));
 	}
 	
@@ -282,7 +276,7 @@ public class Projeto {
 	public static void tocaSom(String ficheiro)
 	{
 		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
-		espera(1000);
+		robo.espera(1000);
 	}
 	
 	public static void limpaEcra()
