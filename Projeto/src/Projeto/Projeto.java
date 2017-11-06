@@ -1,7 +1,6 @@
 package Projeto;
 
 import java.io.File;
-import java.util.Random;
 import java.util.TreeMap;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
@@ -77,11 +76,13 @@ public class Projeto {
 		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 2 - atacar
 		novoTurno(2); //"Turno 2"
 		atacar();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 3 - espera que coloque os inimigos no tabuleiro para os detetar
@@ -90,11 +91,13 @@ public class Projeto {
 		esperaToque();
 		detetaInimigos();
 		defender();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 4 - atacar
 		novoTurno(4);
 		atacar();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 5 - espera que coloque os inimigos no tabuleiro para os detetar
@@ -103,11 +106,13 @@ public class Projeto {
 		esperaToque();
 		detetaInimigos();
 		defender();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 6 - atacar
 		novoTurno(6);
 		atacar();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 7 - espera que coloque os inimigos no tabuleiro para os detetar
@@ -116,11 +121,13 @@ public class Projeto {
 		esperaToque();
 		detetaInimigos();
 		defender();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 8 - atacar
 		novoTurno(8);
 		atacar();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 9 - espera que coloque os inimigos no tabuleiro para os detetar
@@ -129,11 +136,13 @@ public class Projeto {
 		esperaToque();
 		detetaInimigos();
 		defender();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 10 - atacar
 		novoTurno(10);
 		atacar();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 11 - espera que coloque os inimigos no tabuleiro para os detetar
@@ -142,11 +151,13 @@ public class Projeto {
 		esperaToque();
 		detetaInimigos();
 		defender();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 12 - atacar
 		novoTurno(12);
 		atacar();
+		robo.recuperaEnergia();
 		
 		
 		//Turno 13 - espera que coloque os inimigos no tabuleiro para os detetar
@@ -155,6 +166,7 @@ public class Projeto {
 		esperaToque();
 		detetaInimigos();
 		defender();
+		robo.recuperaEnergia();
 	}
 	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
@@ -212,10 +224,14 @@ public class Projeto {
 		tocaSom("som4");
 		for(Inimigo inimigo : inimigos.values())
 		{
-			informaAtaque(inimigo);
-			robo.moverPos(1, inimigo.getPosicao());
-			escolheAtaque(inimigo);
+			if(robo.getEnergDisponivel() >= robo.getEnergSom())
+			{
+				informaAtaque(inimigo);
+				robo.moverPos(1, inimigo.getPosicao());
+				escolheAtaque(inimigo);
+			}
 		}
+		robo.curar();
 		voltarInicio();
 	}
 	
@@ -230,7 +246,7 @@ public class Projeto {
 		}
 		informaDano(vidaPerdida);
 	}
-	
+		
 	
 	//Outros
 	public static void informaDano(int vidaPerdida)
@@ -262,14 +278,15 @@ public class Projeto {
 	
 	public static void escolheAtaque(Inimigo inimigo)
 	{
-		Random rand = new Random();
-		int num = rand.nextInt(3);
+		//Random rand = new Random();
+		//int num = rand.nextInt(3);
+		int energ_disp = robo.getEnergDisponivel();
 		
-		if(num == 0) 
+		if(/*num == 0 &&*/ energ_disp >= robo.getEnergGrua())
 			robo.ataqueGrua(inimigo);
-		else if(num == 1) 
+		else if(/*num == 1 &&*/ energ_disp >= robo.getEnergToque())
 			robo.ataqueToque(inimigo);
-		else if(num == 2) 
+		else if(/*num == 2 &&*/ energ_disp >= robo.getEnergSom())
 			robo.ataqueSom(inimigo);
 	}
 	

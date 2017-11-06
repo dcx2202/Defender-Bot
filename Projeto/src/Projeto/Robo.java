@@ -1,6 +1,7 @@
 package Projeto;
 
 import Projeto.Robo;
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
@@ -13,14 +14,20 @@ public class Robo
 {
 	
 	//Criacao/Iniciacao de variaveis/objetos
-	private static final int vidaMax = 750;
-	private static final int energMax = 500;
-	private static final int energGrua = 300;
-	private static final int energSom = 50;
-	private static final int energToque = 150;
-	private static final int danoGrua = 200;
-	private static final int danoSom = 50;
-	private static final int danoToque = 100;
+	private static final int VIDAMAX = 750;
+	private static final int ENERGMAX = 500;
+	private static final int CURA1 = 100;
+	private static final int CURA2 = 200;
+	private static final int CURA3 = 400;
+	private static final int ENERGCURA1 = 100;
+	private static final int ENERGCURA2 = 200;
+	private static final int ENERGCURA3 = 400;
+	private static final int ENERGGRUA = 300;
+	private static final int ENERSOM = 50;
+	private static final int ENERGTOQUE = 150;
+	private static final int DANOGRUA = 200;
+	private static final int DANOSOM = 50;
+	private static final int DANOTOQUE = 100;
 	private int energAtual;
 	private int vidaAtual;
 	static int posicaoAtual;
@@ -35,8 +42,8 @@ public class Robo
 	//Construtor
 	public Robo()
 	{
-		vidaAtual = vidaMax;
-		energAtual = energMax;
+		vidaAtual = VIDAMAX;
+		energAtual = ENERGMAX;
 	}
 	
 	
@@ -88,7 +95,7 @@ public class Robo
 	//Getters
 	public int getEnergDisponivel()
 	{
-		return energMax - energAtual;
+		return ENERGMAX - energAtual;
 	}
 	
 	public int getVida()
@@ -101,6 +108,21 @@ public class Robo
 		return energAtual;
 	}
 	
+	public int getEnergGrua()
+	{
+		return ENERGGRUA;
+	}
+	
+	
+	public int getEnergSom() {
+		return ENERSOM;
+	}
+
+
+	public int getEnergToque() {
+		return ENERGTOQUE;
+	}
+
 	
 	//Setters
 	public void setVida(int valor)
@@ -112,20 +134,26 @@ public class Robo
 	//Ataque
 	public void ataqueSom(Inimigo inimigo)
 	{
-		energAtual -= energSom;
-		inimigo.recebeDano(danoSom);
+		energAtual -= ENERSOM;
+		inimigo.recebeDano(DANOSOM);
+		Sound.beepSequenceUp();
+		Sound.buzz();
 	}
 	
 	public void ataqueGrua(Inimigo inimigo)
 	{
-		energAtual -= energGrua;
-		inimigo.recebeDano(danoGrua);
+		energAtual -= ENERGGRUA;
+		inimigo.recebeDano(DANOGRUA);
+		Motor.C.resetTachoCount();
+		Motor.C.rotate(-45, true);
 	}
 	
 	public void ataqueToque(Inimigo inimigo)
 	{
-		energAtual -= energToque;
-		inimigo.recebeDano(danoToque);
+		energAtual -= ENERGTOQUE;
+		inimigo.recebeDano(DANOTOQUE);
+		Motor.C.resetTachoCount();
+		Motor.C.rotate(45, true);
 	}
 	
 	
@@ -142,7 +170,28 @@ public class Robo
 	}
 	
 	
+	//Cura
+	public void curar()
+	{
+		int energ_disp = getEnergDisponivel();
+		
+		if(/*num == 0 &&*/ energ_disp >= ENERGCURA3)
+			vidaAtual += CURA3;
+		else if(/*num == 1 &&*/ energ_disp >= ENERGCURA2)
+			vidaAtual += CURA2;
+		else if(/*num == 2 &&*/ energ_disp >= ENERGCURA1)
+			vidaAtual += CURA1;
+	}
+	
 	//Outros
+	public void recuperaEnergia()
+	{
+		if((energAtual * 1.5) <= ENERGMAX)
+			energAtual = (int) Math.round(energAtual * 1.5);
+		else
+			energAtual = ENERGMAX;
+	}
+	
 	public void espera(int ms)
 	{
 		Delay.msDelay(ms);

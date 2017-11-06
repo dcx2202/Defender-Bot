@@ -62,7 +62,10 @@ public class Inimigo {
 	public void recebeDano(int valor)
 	{
 		if(vidaAtual-valor < 0)
+		{
 			vidaAtual = 0;
+			Projeto.inimigos.remove(this);
+		}
 		else
 			vidaAtual -=valor;
 	}
