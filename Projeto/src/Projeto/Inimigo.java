@@ -64,7 +64,7 @@ public class Inimigo {
 		if(vidaAtual-valor < 0)
 		{
 			vidaAtual = 0;
-			Projeto.inimigos.remove(this);
+			Projeto.inimigos.remove(posicao);
 		}
 		else
 			vidaAtual -=valor;

@@ -1,10 +1,9 @@
 package Projeto;
 
-import java.io.File;
 import java.util.TreeMap;
-import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.Color;
+import lejos.utility.Delay;
 
 public class Projeto {
 
@@ -24,7 +23,7 @@ public class Projeto {
 	public static void esperaToque()
 	{
 		while(!robo.detetaToque())
-			robo.espera(100);
+			espera(100);
 	}
 	
 	public static void fimJogo()
@@ -36,8 +35,8 @@ public class Projeto {
 			imprime("Fim do jogo");
 			imprime("----------\n");
 			imprime("Vida acabou!\n");
-			tocaSom("som9");
-			robo.espera(5000);
+			robo.tocaSom("som9"); //"Vida a 0, fim do jogo."
+			espera(5000);
 			limpaEcra();
 			System.exit(0);
 		}
@@ -49,8 +48,8 @@ public class Projeto {
 			imprime("----------\n");
 			imprime("Vitoria!");
 			imprime("Todos os inimigos foram abatidos.\n");
-			tocaSom("som11");
-			robo.espera(5000);
+			robo.tocaSom("som11"); //"Vitoria, todos os inimigos abatidos! Fim do jogo."
+			espera(5000);
 			limpaEcra();
 			System.exit(0);
 		}
@@ -58,128 +57,142 @@ public class Projeto {
 	
 	public static void novoTurno(int turno)
 	{
-		tocaSom("som23"); //"Turno"
-		tocaSom(turno + ""); //"1, 2, 3, ..."
-		robo.espera(1000);
+		robo.tocaSom("som23"); //"Turno"
+		robo.tocaSom(turno + ""); //"1, 2, 3, ..."
+		espera(1000);
 	}
 	
 	public static void novoJogo()
 	{
 		//Espera para comecar o jogo
-		tocaSom("som20"); //"Pressione o botao para comecar"
+		robo.tocaSom("som20"); //"Pressione o botao para comecar"
 		esperaToque();
-		tocaSom("som10"); //"Comecando o jogo"
+		informaSinaisVitais();
+		robo.tocaSom("som10"); //"Comecando o jogo"
 		
 		
 		//Turno 1 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(1); //"Turno 1"
-		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 2 - atacar
 		novoTurno(2); //"Turno 2"
 		atacar();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 3 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(3); //"Turno 3"
-		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
 		defender();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 4 - atacar
 		novoTurno(4);
 		atacar();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 5 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(5);
-		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
 		defender();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 6 - atacar
 		novoTurno(6);
 		atacar();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 7 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(7);
-		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
 		defender();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 8 - atacar
 		novoTurno(8);
 		atacar();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 9 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(9);
-		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
 		defender();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 10 - atacar
 		novoTurno(10);
 		atacar();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 11 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(11);
-		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
 		defender();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 12 - atacar
 		novoTurno(12);
 		atacar();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 		
 		
 		//Turno 13 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(13);
-		tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
 		defender();
 		robo.recuperaEnergia();
+		informaSinaisVitais();
 	}
 	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
-		tocaSom("som3"); //"Voltando a posicao 1"
+		robo.tocaSom("som3"); //"Voltando a posicao 1"
 		robo.mover(-1, 400);
 		while(robo.detetaCor() != Color.WHITE)
-			robo.espera(50);
+			espera(50);
 		robo.parar();
 		robo.mover(1, 200);
-		robo.espera(1);
+		espera(1000);
 		robo.parar();
-		Robo.posicaoAtual = 1;
+		robo.setPosicaoAtual(1);
 	}
 	
 	public static void detetaInimigos()
@@ -188,40 +201,42 @@ public class Projeto {
 		int infantarias= 0;
 		int tanques = 0;
 		
-		tocaSom("som16"); //"Detetando inimigos"
-		while(Robo.posicaoAtual < 6)
+		robo.tocaSom("som16"); //"Detetando inimigos"
+		while(robo.getPosicaoAtual() < 6)
 		{
 			robo.moverPos(1, 1);
-			if(!inimigos.containsKey(Robo.posicaoAtual))
+			int posicao_atual = robo.getPosicaoAtual();
+			
+			if(!inimigos.containsKey(posicao_atual))
 			{
 				if(robo.detetaCor() == Color.BLUE)
 				{
 					imprimeInimigo("Tanque");
-					inimigos.put(Robo.posicaoAtual, new Inimigo(0));
+					inimigos.put(posicao_atual, new Inimigo(0));
 					tanques++;
 				}
 				else if(robo.detetaCor() == Color.GREEN)
 				{
 					imprimeInimigo("Infantaria");
-					inimigos.put(Robo.posicaoAtual, new Inimigo(2));
+					inimigos.put(posicao_atual, new Inimigo(2));
 					infantarias++;
 				}
 				else if(robo.detetaCor() == Color.YELLOW)
 				{
 					imprimeInimigo("Artilharia");
-					inimigos.put(Robo.posicaoAtual, new Inimigo(1));
+					inimigos.put(posicao_atual, new Inimigo(1));
 					artilharias++;
 				}
 			}
 		}
-		tocaSom("som2"); //"Detecao de inimigos concluida"
-		imprimeInimigosDet(artilharias, infantarias, tanques);
+		robo.tocaSom("som2"); //"Detecao de inimigos concluida"
+		informaInimigosDet(artilharias, infantarias, tanques);
 		voltarInicio();
 	}
 	
 	public static void atacar()
 	{
-		tocaSom("som4");
+		robo.tocaSom("som4"); //"Preparando-me para atacar"
 		for(Inimigo inimigo : inimigos.values())
 		{
 			if(robo.getEnergDisponivel() >= robo.getEnergSom())
@@ -238,7 +253,7 @@ public class Projeto {
 	public static void defender()
 	{
 		int vidaPerdida = 0;
-		tocaSom("som7");
+		robo.tocaSom("som7"); //"Preparando-me para defender"
 		for(Inimigo inimigo : inimigos.values())
 		{
 			robo.recebeDano(inimigo.getDano());
@@ -249,31 +264,57 @@ public class Projeto {
 		
 	
 	//Outros
+	public static void informaSinaisVitais()
+	{
+		limpaEcra();
+		System.out.println("-------------");
+		System.out.println("Sinais vitais");
+		System.out.println("-------------\n\n");
+		System.out.println("Vida: " + robo.getVida() + " uv");
+		System.out.println("Energia: " + robo.getEnergia() + " en");
+	}
+	
 	public static void informaDano(int vidaPerdida)
 	{
 		String numero = String.valueOf(vidaPerdida);
 		char[] digitos = numero.toCharArray();
 		int i = 0; 
 		
-		tocaSom("som12");
+		robo.tocaSom("som12"); //"Vida perdida"
 		while(i < digitos.length - 1)
 		{
-			tocaSom(digitos[i] + "");
+			robo.tocaSom(digitos[i] + ""); //"1, 2, 3, ..."
 			i++;
 		}
 	}
 	
 	public static void informaAtaque(Inimigo inimigo)
 	{
-		tocaSom("som21");
+		robo.tocaSom("som21"); //"Atacando"
 		if(inimigo.getId() == 0)
-			tocaSom("som17");
+			robo.tocaSom("som17"); //"Tanque"
 		else if(inimigo.getId() == 1)
-			tocaSom("som19");
+			robo.tocaSom("som19"); //"Artilharia"
 		else if(inimigo.getId() == 2)
-			tocaSom("som18");
-		tocaSom("som22");
-		tocaSom(Integer.toString(inimigo.getPosicao()));
+			robo.tocaSom("som18"); //"Infantaria"
+		robo.tocaSom("som22"); //"na posicao"
+		robo.tocaSom(Integer.toString(inimigo.getPosicao())); //"1, 2, 3, ..."
+	}
+	
+	public static void informaInimigosDet(int artilharias, int infantarias, int tanques)
+	{
+		imprimeInimigosDet(artilharias, infantarias, tanques);
+		robo.tocaSom("som25"); //"Foram detetados"
+		espera(1000);
+		robo.tocaSom(artilharias + ""); //"1, 2, 3, ..."
+		robo.tocaSom("som19"); //"Artilharia"
+		espera(1000);
+		robo.tocaSom(infantarias + ""); //"1, 2, 3, ..."
+		robo.tocaSom("som18"); //"Infantaria"
+		espera(1000);
+		robo.tocaSom(tanques + ""); //"1, 2, 3, ..."
+		robo.tocaSom("som17"); //"Tanque"
+		espera(1000);
 	}
 	
 	public static void escolheAtaque(Inimigo inimigo)
@@ -288,12 +329,6 @@ public class Projeto {
 			robo.ataqueToque(inimigo);
 		else if(/*num == 2 &&*/ energ_disp >= robo.getEnergSom())
 			robo.ataqueSom(inimigo);
-	}
-	
-	public static void tocaSom(String ficheiro)
-	{
-		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
-		robo.espera(1000);
 	}
 	
 	public static void limpaEcra()
@@ -330,5 +365,10 @@ public class Projeto {
 		inimigos.put(posicao, inimigo);
 	}
 
+	public static void espera(int ms)
+	{
+		Delay.msDelay(ms);
+	}
 
+	
 }

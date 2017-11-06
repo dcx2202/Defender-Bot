@@ -1,5 +1,6 @@
 package Projeto;
 
+import java.io.File;
 import Projeto.Robo;
 import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
@@ -123,11 +124,21 @@ public class Robo
 		return ENERGTOQUE;
 	}
 
+	public int getPosicaoAtual()
+	{
+		return posicaoAtual;
+	}
+	
 	
 	//Setters
 	public void setVida(int valor)
 	{
 		vidaAtual = valor;
+	}
+	
+	public void setPosicaoAtual(int valor)
+	{
+		posicaoAtual = valor;
 	}
 	
 	
@@ -136,16 +147,21 @@ public class Robo
 	{
 		energAtual -= ENERSOM;
 		inimigo.recebeDano(DANOSOM);
-		Sound.beepSequenceUp();
-		Sound.buzz();
+		tocaSom("som27"); //"Pew (laser)"
 	}
 	
 	public void ataqueGrua(Inimigo inimigo)
 	{
 		energAtual -= ENERGGRUA;
 		inimigo.recebeDano(DANOGRUA);
+		mover(1, 400);
+		espera(200);
+		parar();
 		Motor.C.resetTachoCount();
 		Motor.C.rotate(-45, true);
+		mover(-1, 400);
+		espera(200);
+		parar();
 	}
 	
 	public void ataqueToque(Inimigo inimigo)
@@ -184,15 +200,23 @@ public class Robo
 	}
 	
 	//Outros
+	public void tocaSom(String ficheiro)
+	{
+		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
+		espera(1000);
+	}
+	
 	public void recuperaEnergia()
 	{
+		tocaSom("som26"); //"Recuperando"
+		tocaSom("som5"); //"Energia"
 		if((energAtual * 1.5) <= ENERGMAX)
 			energAtual = (int) Math.round(energAtual * 1.5);
 		else
 			energAtual = ENERGMAX;
 	}
 	
-	public void espera(int ms)
+	public static void espera(int ms)
 	{
 		Delay.msDelay(ms);
 	}
