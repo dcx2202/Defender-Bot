@@ -8,6 +8,7 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
+import lejos.robotics.Color;
 import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
@@ -45,6 +46,7 @@ public class Robo
 	{
 		vidaAtual = VIDAMAX;
 		energAtual = ENERGMAX;
+		posicaoAtual = 1;
 	}
 	
 	
@@ -65,10 +67,17 @@ public class Robo
 		}
 	}
 	
-	public void moverPos(int direcao, int numPosicoes) //Move-se na direcao especificada durante 1s para cada posicao
+	public void moverPos(int direcao, int numPosicoes)
 	{
-		mover(direcao, 400);
-		espera(numPosicoes * 1000);
+		int pos = numPosicoes;
+		while(pos > 0)
+		{
+			mover(direcao, 200);
+			while(detetaCor() != Color.RED)
+				espera(50);
+			espera(700);
+			pos--;
+		}
 		parar();
 		posicaoAtual = posicaoAtual + (direcao * numPosicoes);
 	}
@@ -147,29 +156,42 @@ public class Robo
 	{
 		energAtual -= ENERSOM;
 		inimigo.recebeDano(DANOSOM);
-		tocaSom("som27"); //"Pew (laser)"
-	}
-	
-	public void ataqueGrua(Inimigo inimigo)
-	{
-		energAtual -= ENERGGRUA;
-		inimigo.recebeDano(DANOGRUA);
-		mover(1, 400);
-		espera(200);
-		parar();
-		Motor.C.resetTachoCount();
-		Motor.C.rotate(-45, true);
-		mover(-1, 400);
-		espera(200);
-		parar();
+		//tocaSom("som27"); //"Pew (laser)"
 	}
 	
 	public void ataqueToque(Inimigo inimigo)
 	{
 		energAtual -= ENERGTOQUE;
 		inimigo.recebeDano(DANOTOQUE);
+		int vel = Motor.C.getSpeed();
+		mover(-1, 300);
+		espera(750);
+		parar();
 		Motor.C.resetTachoCount();
-		Motor.C.rotate(45, true);
+		Motor.C.rotate(-30);
+		espera(200);
+		Motor.C.setSpeed(60);
+		Motor.C.resetTachoCount();
+		Motor.C.rotate(29);
+		espera(200);
+		mover(1, 300);
+		espera(750);
+		parar();
+		Motor.C.setSpeed(vel);
+	}
+	
+	public void ataqueGrua(Inimigo inimigo)
+	{
+		energAtual -= ENERGGRUA;
+		inimigo.recebeDano(DANOGRUA);
+		int vel = Motor.C.getSpeed();
+		Motor.C.resetTachoCount();
+		Motor.C.rotate(47);
+		espera(200);
+		Motor.C.resetTachoCount();
+		Motor.C.setSpeed(47);
+		Motor.C.rotate(-47);
+		Motor.C.setSpeed(vel);
 	}
 	
 	
@@ -208,8 +230,8 @@ public class Robo
 	
 	public void recuperaEnergia()
 	{
-		tocaSom("som26"); //"Recuperando"
-		tocaSom("som5"); //"Energia"
+		//tocaSom("som26"); //"Recuperando"
+		//tocaSom("som5"); //"Energia"
 		if((energAtual * 1.5) <= ENERGMAX)
 			energAtual = (int) Math.round(energAtual * 1.5);
 		else

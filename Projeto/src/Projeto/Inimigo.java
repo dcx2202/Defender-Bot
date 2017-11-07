@@ -11,7 +11,7 @@ public class Inimigo {
 	private int vidaAtual;
 	private int vidaMax;
 	private int forca;
-	private int id; //0-tanque, 1-artilharia, 2-infantaria;
+	private int id; //0-tanque, 1-artilharia, 2-infantaria, 3-vazio;
 	int posicao;
 	
 	public Inimigo(int id)
@@ -36,6 +36,12 @@ public class Inimigo {
 			vidaAtual = vidaInf;
 			vidaMax = vidaInf;
 			forca = forcaInf;
+		}
+		else if (id == 3)
+		{
+			vidaAtual = 0;
+			vidaMax = 0;
+			forca = 0;
 		}
 	}
 	
@@ -72,6 +78,32 @@ public class Inimigo {
 	
 	public int getDano()
 	{
-		return forca*(vidaAtual/vidaMax);
+		if(id != 3)
+			return forca*(vidaAtual/vidaMax);
+		else
+			return 0;
 	}
+	
+	public String toString()
+	{
+		String string = "";
+		if(id == 0)
+		{
+			string += "Tanque";
+		}
+		else if(id == 1)
+		{
+			string += "Artilharia";
+		}
+		else if(id == 2)
+		{
+			string += "Infantaria";
+		}
+		else if(id == 3)
+		{
+			string += "Vazio";
+		}
+		return string;
+	}
+	
 }
