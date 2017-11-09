@@ -152,6 +152,19 @@ public class Robo
 	
 	
 	//Ataque
+	public void escolheAtaque(Inimigo inimigo)
+	{
+		if(energAtual > 200)
+		{
+			if(inimigo.getVida() > 150)
+				ataqueGrua(inimigo);
+			else if(inimigo.getVida() > 50)
+				ataqueToque(inimigo);
+			else if(inimigo.getVida() > 0)
+				ataqueSom(inimigo);
+		}
+	}
+	
 	public void ataqueSom(Inimigo inimigo)
 	{
 		energAtual -= ENERSOM;
@@ -236,6 +249,7 @@ public class Robo
 			energAtual = (int) Math.round(energAtual * 1.5);
 		else
 			energAtual = ENERGMAX;
+		Projeto.dadosRobo();
 	}
 	
 	public static void espera(int ms)

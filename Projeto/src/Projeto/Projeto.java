@@ -16,11 +16,7 @@ public class Projeto {
 	{
 		preencheVazios();
 		voltarInicio();
-		//novoJogo();
-		robo.moverPos(1, 3);
-		robo.ataqueGrua(new Inimigo(0));
-		espera(1000);
-		robo.ataqueToque(new Inimigo(0));
+		novoJogo();
 	}
 
 	
@@ -72,17 +68,16 @@ public class Projeto {
 	{
 		//Espera para comecar o jogo
 		//robo.tocaSom("som20"); //"Pressione o botao para comecar"
-		esperaToque();
 		dadosRobo();
 		//robo.tocaSom("som10"); //"Comecando o jogo"
 		
 		
 		//Turno 1 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(1); //"Turno 1"
+		robo.recuperaEnergia();
 		//robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
 		esperaToque();
 		detetaInimigos();
-		robo.recuperaEnergia();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -90,8 +85,8 @@ public class Projeto {
 		
 		//Turno 2 - atacar
 		novoTurno(2); //"Turno 2"
-		atacar();
 		robo.recuperaEnergia();
+		atacar();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -100,10 +95,10 @@ public class Projeto {
 		//Turno 3 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(3); //"Turno 3"
 		//robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.recuperaEnergia();
 		esperaToque();
 		detetaInimigos();
 		defender();
-		robo.recuperaEnergia();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -111,8 +106,8 @@ public class Projeto {
 		
 		//Turno 4 - atacar
 		novoTurno(4);
-		atacar();
 		robo.recuperaEnergia();
+		atacar();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -121,10 +116,10 @@ public class Projeto {
 		//Turno 5 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(5);
 		//robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.recuperaEnergia();
 		esperaToque();
 		detetaInimigos();
 		defender();
-		robo.recuperaEnergia();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -132,8 +127,8 @@ public class Projeto {
 		
 		//Turno 6 - atacar
 		novoTurno(6);
-		atacar();
 		robo.recuperaEnergia();
+		atacar();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -142,10 +137,10 @@ public class Projeto {
 		//Turno 7 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(7);
 		//robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.recuperaEnergia();
 		esperaToque();
 		detetaInimigos();
 		defender();
-		robo.recuperaEnergia();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -153,8 +148,8 @@ public class Projeto {
 		
 		//Turno 8 - atacar
 		novoTurno(8);
-		atacar();
 		robo.recuperaEnergia();
+		atacar();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -163,10 +158,10 @@ public class Projeto {
 		//Turno 9 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(9);
 		//robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.recuperaEnergia();
 		esperaToque();
 		detetaInimigos();
 		defender();
-		robo.recuperaEnergia();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -174,8 +169,8 @@ public class Projeto {
 		
 		//Turno 10 - atacar
 		novoTurno(10);
-		atacar();
 		robo.recuperaEnergia();
+		atacar();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -184,10 +179,10 @@ public class Projeto {
 		//Turno 11 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(11);
 		//robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.recuperaEnergia();
 		esperaToque();
 		detetaInimigos();
 		defender();
-		robo.recuperaEnergia();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -195,8 +190,8 @@ public class Projeto {
 		
 		//Turno 12 - atacar
 		novoTurno(12);
-		atacar();
 		robo.recuperaEnergia();
+		atacar();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -205,10 +200,10 @@ public class Projeto {
 		//Turno 13 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(13);
 		//robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		robo.recuperaEnergia();
 		esperaToque();
 		detetaInimigos();
 		defender();
-		robo.recuperaEnergia();
 		dadosInimigos();
 		esperaToque();
 		dadosRobo();
@@ -230,39 +225,38 @@ public class Projeto {
 	
 	public static void detetaInimigos()
 	{
-		int artilharias = 0;
-		int infantarias= 0;
-		int tanques = 0;
+//		int artilharias = 0;
+//		int infantarias= 0;
+//		int tanques = 0;
 		
 		robo.setPosicaoAtual(1);
 		
 		//robo.tocaSom("som16"); //"Detetando inimigos"
 		while(robo.getPosicaoAtual() <= 6)
 		{
-			imprime(robo.getPosicaoAtual() + "");
 			if(inimigos.get(robo.getPosicaoAtual()).getId() == 3)
 			{
 				if(robo.detetaCor() == Color.BLUE)
 				{
-					imprimeInimigo("Tanque");
+					//imprimeInimigo("Tanque");
 					inimigos.put(robo.getPosicaoAtual(), new Inimigo(0));
-					tanques++;
+					//tanques++;
 				}
 				else if(robo.detetaCor() == Color.BLACK)
 				{
-					imprimeInimigo("Infantaria");
+					//imprimeInimigo("Infantaria");
 					inimigos.put(robo.getPosicaoAtual(), new Inimigo(2));
-					infantarias++;
+					//infantarias++;
 				}
 				else if(robo.detetaCor() == Color.YELLOW)
 				{
-					imprimeInimigo("Artilharia");
+					//imprimeInimigo("Artilharia");
 					inimigos.put(robo.getPosicaoAtual(), new Inimigo(1));
-					artilharias++;
+					//artilharias++;
 				}
 				else if(robo.detetaCor() == Color.NONE)
 				{
-					imprimeInimigo("Vazio");
+					//imprimeInimigo("Vazio");
 					inimigos.put(robo.getPosicaoAtual(), new Inimigo(3));
 				}
 			}
@@ -279,20 +273,33 @@ public class Projeto {
 	
 	public static void atacar()
 	{
-		//robo.tocaSom("som4"); //"Preparando-me para atacar"
-		for(Inimigo inimigo : inimigos.values())
+		
+		robo.setPosicaoAtual(1);
+		
+		//robo.tocaSom("som16"); //"Detetando inimigos"
+		while(robo.getPosicaoAtual() <= 6)
 		{
-			if(inimigo.getId() != 3)
-			{
-				if(robo.getEnergDisponivel() >= robo.getEnergSom())
-				{
-					informaAtaque(inimigo);
-					robo.moverPos(1, inimigo.getPosicao());
-					escolheAtaque(inimigo);
-				}
-			}
+			dadosRobo();
+			robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
+			
+			if(robo.getPosicaoAtual() < 6)
+				robo.moverPos(1, 1);
+			else
+				robo.setPosicaoAtual(robo.getPosicaoAtual() + 1);
+			espera(500);
 		}
-		robo.curar();
+		voltarInicio();
+	
+		
+		
+		//robo.tocaSom("som4"); //"Preparando-me para atacar"
+//		for(Inimigo inimigo : inimigos.values())
+//		{
+//			//informaAtaque(inimigo);
+//			robo.moverPos(1, inimigo.getPosicao());
+//			robo.escolheAtaque(inimigo);
+//		}
+		//robo.curar();
 		//voltarInicio();
 	}
 	
@@ -302,10 +309,12 @@ public class Projeto {
 		//robo.tocaSom("som7"); //"Preparando-me para defender"
 		for(Inimigo inimigo : inimigos.values())
 		{
+			dadosRobo();
+			espera(1000);
 			robo.recebeDano(inimigo.getDano());
 			vidaPerdida += inimigo.getDano();
 		}
-		informaDano(vidaPerdida);
+		//informaDano(vidaPerdida);
 	}
 		
 	
@@ -383,20 +392,6 @@ public class Projeto {
 		//robo.tocaSom(tanques + ""); //"1, 2, 3, ..."
 		//robo.tocaSom("som17"); //"Tanque"
 		espera(1000);
-	}
-	
-	public static void escolheAtaque(Inimigo inimigo)
-	{
-		//Random rand = new Random();
-		//int num = rand.nextInt(3);
-		int energ_disp = robo.getEnergDisponivel();
-		
-		if(/*num == 0 &&*/ energ_disp >= robo.getEnergGrua())
-			robo.ataqueGrua(inimigo);
-		else if(/*num == 1 &&*/ energ_disp >= robo.getEnergToque())
-			robo.ataqueToque(inimigo);
-		else if(/*num == 2 &&*/ energ_disp >= robo.getEnergSom())
-			robo.ataqueSom(inimigo);
 	}
 	
 	public static void limpaEcra()
