@@ -1,0 +1,116 @@
+Turno 1:
+	-Colocar inimigos
+Turno 2:
+	-Toque
+	-Cura?
+	-Detetar inimigos
+	-Mostrar dados dos inimigos;
+	-Toque
+	-Mostrar sinais vitais
+	-Toque
+	-Atacar inimigos
+	-Voltar ao início
+	-Mostrar dados dos inimigos
+	-Toque
+	-Mostrar sinais vitais
+Turno 3:
+	-Toque
+	-Cura?
+	-Colocar inimigos
+	-Receber dano
+	-Mostrar sinais vitais
+Turno 4:
+	-Toque
+	-Cura?
+	-Detetar inimigos
+	-Mostrar dados dos inimigos;
+	-Toque
+	-Mostrar sinais vitais
+	-Toque
+	-Atacar inimigos
+	-Voltar ao início
+	-Mostrar dados dos inimigos
+	-Toque
+	-Mostrar sinais vitais
+Turno 5:
+	-Toque
+	-Cura?
+	-Colocar inimigos
+	-Receber dano
+	-Mostrar sinais vitais
+Turno 6:
+	-Toque
+	-Cura?
+	-Detetar inimigos
+	-Mostrar dados dos inimigos;
+	-Toque
+	-Mostrar sinais vitais
+	-Toque
+	-Atacar inimigos
+	-Voltar ao início
+	-Mostrar dados dos inimigos
+	-Toque
+	-Mostrar sinais vitais
+Turno 7:
+	-Toque
+	-Cura?
+	-Colocar inimigos
+	-Receber dano
+	-Mostrar sinais vitais
+Turno 8:
+	-Toque
+	-Cura?
+	-Detetar inimigos
+	-Mostrar dados dos inimigos;
+	-Toque
+	-Mostrar sinais vitais
+	-Toque
+	-Atacar inimigos
+	-Voltar ao início
+	-Mostrar dados dos inimigos
+	-Toque
+	-Mostrar sinais vitais
+Turno 9:
+	-Toque
+	-Cura?
+	-Colocar inimigos
+	-Receber dano
+	-Mostrar sinais vitais
+Turno 10:
+	-Toque
+	-Cura?
+	-Detetar inimigos
+	-Mostrar dados dos inimigos;
+	-Toque
+	-Mostrar sinais vitais
+	-Toque
+	-Atacar inimigos
+	-Voltar ao início
+	-Mostrar dados dos inimigos
+	-Toque
+	-Mostrar sinais vitais
+Turno 11:
+	-Toque
+	-Cura?
+	-Colocar inimigos
+	-Receber dano
+	-Mostrar sinais vitais
+Turno 12:
+	-Toque
+	-Cura?
+	-Detetar inimigos
+	-Mostrar dados dos inimigos;
+	-Toque
+	-Mostrar sinais vitais
+	-Toque
+	-Atacar inimigos
+	-Voltar ao início
+	-Mostrar dados dos inimigos
+	-Toque
+	-Mostrar sinais vitais
+Turno 13:
+	-Toque
+	-Cura?
+	-Receber dano
+	-Mostrar sinais vitais
+	-Toque
