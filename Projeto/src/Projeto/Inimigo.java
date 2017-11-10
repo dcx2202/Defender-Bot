@@ -1,5 +1,8 @@
 package Projeto;
 
+import java.io.File;
+import lejos.hardware.Sound;
+
 public class Inimigo {
 
 	private static final int vidaTanque = 200;
@@ -55,11 +58,6 @@ public class Inimigo {
 		return vidaAtual;
 	}
 	
-	public int getPosicao()
-	{
-		return posicao;
-	}
-	
 	public void setVida(int valor)
 	{
 		vidaAtual = valor;
@@ -68,7 +66,10 @@ public class Inimigo {
 	public void recebeDano(int valor)
 	{
 		if(vidaAtual-valor < 0)
+		{
 			vidaAtual = 0;
+			Sound.playSample(new File("/home/root/som8.wav"), 100);
+		}
 		else
 			vidaAtual -=valor;
 	}

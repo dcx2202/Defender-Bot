@@ -10,7 +10,6 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.robotics.Color;
 import lejos.robotics.SampleProvider;
-import lejos.utility.Delay;
 
 public class Robo 
 {
@@ -74,8 +73,8 @@ public class Robo
 		{
 			mover(direcao, 200);
 			while(detetaCor() != Color.RED)
-				espera(50);
-			espera(700);
+				Projeto.espera(50);
+			Projeto.espera(700);
 			pos--;
 		}
 		parar();
@@ -107,30 +106,13 @@ public class Robo
 	{
 		return ENERGMAX - energAtual;
 	}
-	
-	public int getVida()
-	{
-		return vidaAtual;
-	}
-	
-	public int getEnergia()
-	{
+
+	public int getEnergia() {
 		return energAtual;
 	}
-	
-	public int getEnergGrua()
-	{
-		return ENERGGRUA;
-	}
-	
-	
-	public int getEnergSom() {
-		return ENERSOM;
-	}
 
-
-	public int getEnergToque() {
-		return ENERGTOQUE;
+	public int getVida() {
+		return vidaAtual;
 	}
 
 	public int getPosicaoAtual()
@@ -140,11 +122,6 @@ public class Robo
 	
 	
 	//Setters
-	public void setVida(int valor)
-	{
-		vidaAtual = valor;
-	}
-	
 	public void setPosicaoAtual(int valor)
 	{
 		posicaoAtual = valor;
@@ -169,7 +146,7 @@ public class Robo
 	{
 		energAtual -= ENERSOM;
 		inimigo.recebeDano(DANOSOM);
-		//tocaSom("som27"); //"Pew (laser)"
+		tocaSom("som27"); //"PewPew (laser)"
 	}
 	
 	public void ataqueToque(Inimigo inimigo)
@@ -178,17 +155,17 @@ public class Robo
 		inimigo.recebeDano(DANOTOQUE);
 		int vel = Motor.C.getSpeed();
 		mover(-1, 300);
-		espera(750);
+		Projeto.espera(750);
 		parar();
 		Motor.C.resetTachoCount();
 		Motor.C.rotate(-30);
-		espera(200);
+		Projeto.espera(200);
 		Motor.C.setSpeed(60);
 		Motor.C.resetTachoCount();
 		Motor.C.rotate(29);
-		espera(200);
+		Projeto.espera(200);
 		mover(1, 300);
-		espera(750);
+		Projeto.espera(750);
 		parar();
 		Motor.C.setSpeed(vel);
 	}
@@ -200,7 +177,7 @@ public class Robo
 		int vel = Motor.C.getSpeed();
 		Motor.C.resetTachoCount();
 		Motor.C.rotate(47);
-		espera(200);
+		Projeto.espera(200);
 		Motor.C.resetTachoCount();
 		Motor.C.setSpeed(47);
 		Motor.C.rotate(-47);
@@ -226,25 +203,35 @@ public class Robo
 	{
 		int energ_disp = getEnergDisponivel();
 		
-		if(/*num == 0 &&*/ energ_disp >= ENERGCURA3)
+		if(energ_disp >= ENERGCURA3 + 50 && getVida() <= 100)
+		{
 			vidaAtual += CURA3;
-		else if(/*num == 1 &&*/ energ_disp >= ENERGCURA2)
+			energAtual -= ENERGCURA3;
+			tocaSom("som6");
+		}
+		else if(energ_disp >= ENERGCURA2 + 50 && getVida() <= 200)
+		{
 			vidaAtual += CURA2;
-		else if(/*num == 2 &&*/ energ_disp >= ENERGCURA1)
+			energAtual -= ENERGCURA2;
+			tocaSom("som6");
+		}
+		else if(energ_disp >= ENERGCURA1 + 50 && getVida() <= 300)
+		{
 			vidaAtual += CURA1;
+			energAtual -= ENERGCURA1;
+			tocaSom("som6");
+		}
 	}
 	
 	//Outros
 	public void tocaSom(String ficheiro)
 	{
 		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
-		espera(1000);
 	}
 	
 	public void recuperaEnergia()
 	{
-		//tocaSom("som26"); //"Recuperando"
-		//tocaSom("som5"); //"Energia"
+		tocaSom("som5"); //"Recuperando energia"
 		if((energAtual * 1.5) <= ENERGMAX)
 			energAtual = (int) Math.round(energAtual * 1.5);
 		else
@@ -252,10 +239,23 @@ public class Robo
 		Projeto.dadosRobo();
 	}
 	
-	public static void espera(int ms)
+	public void festejar()
 	{
-		Delay.msDelay(ms);
+		mover(-1, 800);
+		while(detetaCor() != Color.WHITE)
+			Projeto.espera(20);
+		mover(-1, 400);
+		Projeto.espera(2000);
+		parar();
+		Motor.A.setSpeed(1000);
+		Motor.B.setSpeed(1000);
+		Motor.A.forward();
+		Motor.B.backward();
+		tocaSom("som29");
+		tocaSom("som27");
+		tocaSom("som27");
+		tocaSom("som27");
+		tocaSom("som27");
+		parar();
 	}
-	
-	
 }
