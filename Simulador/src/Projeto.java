@@ -99,7 +99,6 @@ public class Projeto {
 		int aux = Integer.parseInt(turno + "");
 		if(inimigos.size() <= 6)
 		{
-			i = 1;
 			for(int l = 1 ; l <= aux ; l++)
 			{
 				inimigos.put(i, new Inimigo(Integer.parseInt(string.toCharArray()[i-1] + "")));
