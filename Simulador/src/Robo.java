@@ -32,7 +32,7 @@ public class Robo
 	//Getters
 	public int getEnergDisponivel()
 	{
-		return ENERGMAX - energAtual;
+		return energAtual;
 	}
 
 	public int getEnergia() {
