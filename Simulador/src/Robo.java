@@ -11,7 +11,7 @@ public class Robo
 	private static final int ENERGCURA2 = 200;
 	private static final int ENERGCURA3 = 400;
 	private static final int ENERGGRUA = 300;
-	private static final int ENERSOM = 50;
+	private static final int ENERGSOM = 50;
 	private static final int ENERGTOQUE = 150;
 	private static final int DANOGRUA = 200;
 	private static final int DANOSOM = 50;
@@ -61,7 +61,7 @@ public class Robo
 	{
 		if(vidaAtual > 0)
 		{
-			if(energAtual > 200)
+			if(energAtual > 0) //usar para especificar energia que fica armazenada (- energia gasta no ataque abaixo)
 			{
 				if(inimigo.getVida() > 150)
 					ataqueGrua(inimigo);
@@ -75,20 +75,29 @@ public class Robo
 	
 	public void ataqueSom(Inimigo inimigo)
 	{
-		energAtual -= ENERSOM;
-		inimigo.recebeDano(DANOSOM);
+		if(energAtual - ENERGSOM >= 0)
+		{
+			energAtual -= ENERGSOM;
+			inimigo.recebeDano(DANOSOM);
+		}
 	}
 	
 	public void ataqueToque(Inimigo inimigo)
 	{
-		energAtual -= ENERGTOQUE;
-		inimigo.recebeDano(DANOTOQUE);
+		if(energAtual - ENERGTOQUE >= 0)
+		{
+			energAtual -= ENERGTOQUE;
+			inimigo.recebeDano(DANOTOQUE);
+		}
 	}
 	
 	public void ataqueGrua(Inimigo inimigo)
 	{
-		energAtual -= ENERGGRUA;
-		inimigo.recebeDano(DANOGRUA);
+		if(energAtual - ENERGGRUA >= 0)
+		{
+			energAtual -= ENERGGRUA;
+			inimigo.recebeDano(DANOGRUA);
+		}
 	}
 	
 	
