@@ -59,14 +59,17 @@ public class Robo
 	//Ataque
 	public void escolheAtaque(Inimigo inimigo)
 	{
-		if(energAtual > 200)
+		if(vidaAtual > 0)
 		{
-			if(inimigo.getVida() > 150)
-				ataqueGrua(inimigo);
-			else if(inimigo.getVida() > 50)
-				ataqueToque(inimigo);
-			else if(inimigo.getVida() > 0)
-				ataqueSom(inimigo);
+			if(energAtual > 200)
+			{
+				if(inimigo.getVida() > 150)
+					ataqueGrua(inimigo);
+				else if(inimigo.getVida() > 50)
+					ataqueToque(inimigo);
+				else if(inimigo.getVida() > 0)
+					ataqueSom(inimigo);
+			}
 		}
 	}
 	
@@ -104,31 +107,37 @@ public class Robo
 	//Cura
 	public void curar()
 	{
-		int energ_disp = getEnergDisponivel();
-		
-		if(energ_disp >= ENERGCURA3 + 50 && getVida() <= 100)
+		if(vidaAtual > 0)
 		{
-			vidaAtual += CURA3;
-			energAtual -= ENERGCURA3;
-		}
-		else if(energ_disp >= ENERGCURA2 + 50 && getVida() <= 200)
-		{
-			vidaAtual += CURA2;
-			energAtual -= ENERGCURA2;
-		}
-		else if(energ_disp >= ENERGCURA1 + 50 && getVida() <= 300)
-		{
-			vidaAtual += CURA1;
-			energAtual -= ENERGCURA1;
+			int energ_disp = getEnergDisponivel();
+			
+			if(energ_disp >= ENERGCURA3 + 50 && getVida() <= 100)
+			{
+				vidaAtual += CURA3;
+				energAtual -= ENERGCURA3;
+			}
+			else if(energ_disp >= ENERGCURA2 + 50 && getVida() <= 200)
+			{
+				vidaAtual += CURA2;
+				energAtual -= ENERGCURA2;
+			}
+			else if(energ_disp >= ENERGCURA1 + 50 && getVida() <= 300)
+			{
+				vidaAtual += CURA1;
+				energAtual -= ENERGCURA1;
+			}
 		}
 	}
 	
 	//Outros
 	public void recuperaEnergia()
 	{
-		if((energAtual * 1.5) <= ENERGMAX)
-			energAtual = (int) Math.round(energAtual * 1.5);
-		else
-			energAtual = ENERGMAX;
+		if(vidaAtual > 0)
+		{
+			if((energAtual * 1.5) <= ENERGMAX)
+				energAtual = (int) Math.round(energAtual * 1.5);
+			else
+				energAtual = ENERGMAX;
+		}
 	}
 }
