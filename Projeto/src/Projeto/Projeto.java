@@ -280,7 +280,7 @@ public class Projeto {
 			Sound.beep();
 			dadosRobo();
 			espera(1000);
-			robo.recebeDano(inimigo.getDano());
+			robo.recebeDano((int)inimigo.getDano());
 		}
 	}
 		

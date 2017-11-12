@@ -74,10 +74,10 @@ public class Inimigo {
 			vidaAtual -=valor;
 	}
 	
-	public int getDano()
+	public double getDano()
 	{
 		if(id != 3)
-			return forca*(vidaAtual/vidaMax);
+			return forca*((double)vidaAtual/vidaMax);
 		else
 			return 0;
 	}
