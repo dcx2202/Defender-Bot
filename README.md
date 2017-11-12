@@ -15,7 +15,7 @@ Resultados (exemplo):
 000000 - e colocado 1 tanque a primeira posicao (id 0), 1 tanque na 2, 1 tanque na 3, 1 tanque na 4, 1 tanque na 5, 1 tanque na 6
 (ids: 0 - tanque ; 1 - artilharia ; 2 - infantaria)
 
-0 - vida inimigo no slot 1;
+0 - vida do inimigo na posicao 1;
 200 - vida do inimigo na posicao 2;
 200 - vida do inimigo na posicao 3;
 200 - vida do inimigo na posicao 4;
