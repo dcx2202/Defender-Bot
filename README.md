@@ -1,6 +1,6 @@
 # RoboIA1718
 
-Simulador.
+Simulador
 
 Resultados (exemplo):
 
