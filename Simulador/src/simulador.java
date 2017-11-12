@@ -35,8 +35,8 @@ public class simulador {
 		arr3.add(4);
 		arr3.add(5);
 		arr3.add(6);
-		generateCombinations(6, arr1);
-		generateCombinations1(6, arr3);
+		geraCombinacoesInimigos(6, arr1);
+		geraCombinacoesTurnos(6, arr3);
 		for(String str1 : arr4)
 		{
 			bw.write("\n\n===========================");
@@ -66,7 +66,7 @@ public class simulador {
 		bw.close();
 	}
 	
-	private static void generateCombinations(int arraySize, ArrayList<Integer> possibleValues)
+	private static void geraCombinacoesInimigos(int arraySize, ArrayList<Integer> possibleValues) //insere no arr2 todas as combinacoes de inimigos possiveis
 	{
 	    int carry;
 	    int[] indices = new int[arraySize];
@@ -97,7 +97,7 @@ public class simulador {
 	    }
 	    while(carry != 1); // Call this method iteratively until a carry is left over
 	}
-	private static void generateCombinations1(int arraySize, ArrayList<Integer> possibleValues)
+	private static void geraCombinacoesTurnos(int arraySize, ArrayList<Integer> possibleValues) //insere no arr4 todas as combinacoes de turnos em que os inimigos sao inseridos
 	{
 	    int carry;
 	    int[] indices = new int[arraySize];
@@ -113,10 +113,10 @@ public class simulador {
 	        {
 	        	aux += Integer.parseInt(c + "");
 	        }
+	        
 	        if(aux == 6)
 	        	arr4.add(str);
-	        //System.out.println("");
-
+	        
 	        carry = 1;
 	        for(int i = indices.length - 1; i >= 0; i--)
 	        {

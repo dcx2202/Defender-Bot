@@ -122,7 +122,7 @@ public class Projeto {
 	{
 		for(Inimigo inimigo : inimigos.values())
 		{
-			robo.recebeDano(inimigo.getDano());
+			robo.recebeDano((int)inimigo.getDano());
 		}
 	}
 		
