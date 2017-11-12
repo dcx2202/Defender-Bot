@@ -1,6 +1,6 @@
 # RoboIA1718
 
-Simulador da fase 1.
+Simulador.
 
 Resultados (exemplo):
 
