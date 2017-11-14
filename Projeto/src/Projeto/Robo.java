@@ -1,8 +1,6 @@
 package Projeto;
 
-import java.io.File;
 import Projeto.Robo;
-import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
@@ -11,7 +9,7 @@ import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.robotics.Color;
 import lejos.robotics.SampleProvider;
 
-public class Robo 
+public class Robo
 {
 	
 	//Criacao/Iniciacao de variaveis/objetos
@@ -38,6 +36,7 @@ public class Robo
 	private static final EV3TouchSensor sensorToque = new EV3TouchSensor(s2);
 	private static final SampleProvider obtemAmostra = sensorToque.getTouchMode();
 	private static float[] amostra = new float[obtemAmostra.sampleSize()];
+	Coluna coluna;
 	
 	
 	//Construtor
@@ -140,6 +139,8 @@ public class Robo
 			else if(inimigo.getVida() > 0)
 				ataqueSom(inimigo);
 		}
+		if(inimigo.getVida() <= 0)
+			tocaSom("som8");
 	}
 	
 	public void ataqueSom(Inimigo inimigo)
@@ -201,21 +202,19 @@ public class Robo
 	//Cura
 	public void curar()
 	{
-		int energ_disp = getEnergDisponivel();
-		
-		if(energ_disp >= ENERGCURA3 + 50 && getVida() <= 100)
+		if(energAtual >= ENERGCURA3 + 50 && getVida() <= 100)
 		{
 			vidaAtual += CURA3;
 			energAtual -= ENERGCURA3;
 			tocaSom("som6");
 		}
-		else if(energ_disp >= ENERGCURA2 + 50 && getVida() <= 200)
+		else if(energAtual >= ENERGCURA2 + 50 && getVida() <= 200)
 		{
 			vidaAtual += CURA2;
 			energAtual -= ENERGCURA2;
 			tocaSom("som6");
 		}
-		else if(energ_disp >= ENERGCURA1 + 50 && getVida() <= 300)
+		else if(energAtual >= ENERGCURA1 + 50 && getVida() <= 300)
 		{
 			vidaAtual += CURA1;
 			energAtual -= ENERGCURA1;
@@ -226,7 +225,8 @@ public class Robo
 	//Outros
 	public void tocaSom(String ficheiro)
 	{
-		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
+		coluna = new Coluna(ficheiro);
+		coluna.start();
 	}
 	
 	public void recuperaEnergia()

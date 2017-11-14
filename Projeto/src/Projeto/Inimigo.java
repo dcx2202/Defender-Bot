@@ -68,7 +68,6 @@ public class Inimigo {
 		if(vidaAtual-valor < 0)
 		{
 			vidaAtual = 0;
-			Sound.playSample(new File("/home/root/som8.wav"), 100);
 		}
 		else
 			vidaAtual -=valor;
