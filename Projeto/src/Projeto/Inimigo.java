@@ -1,8 +1,5 @@
 package Projeto;
 
-import java.io.File;
-import lejos.hardware.Sound;
-
 public class Inimigo {
 
 	private static final int vidaTanque = 200;

@@ -19,6 +19,7 @@ public class Projeto {
 	{
 		LCD.setAutoRefresh(false);
 		preencheVazios();
+		robo.tocaSom("som3"); //"Voltando a posicao 1"
 		voltarInicio();
 		novoJogo();
 	}
@@ -195,7 +196,7 @@ public class Projeto {
 	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
-		robo.tocaSom("som3"); //"Voltando a posicao 1"
+		//robo.tocaSom("som3"); //"Voltando a posicao 1"
 		//Coluna coluna = new Coluna("som3");
 		robo.mover(-1, 400);
 		while(robo.detetaCor() != Color.WHITE)
@@ -263,6 +264,8 @@ public class Projeto {
 		}
 		robo.setPosicaoAtual(1);
 		robo.tocaSom("som4"); //"Preparando-me para atacar"
+		//Coluna coluna = new Coluna("som4");
+		//coluna.start();
 		while(robo.getPosicaoAtual() <= posUltimoVivo)
 		{
 			dadosRobo();
@@ -279,6 +282,8 @@ public class Projeto {
 	public static void defender()
 	{
 		robo.tocaSom("som7"); //"Preparando-me para defender"
+		//Coluna coluna = new Coluna("som7");
+		//coluna.start();
 		for(Inimigo inimigo : inimigos.values())
 		{
 			Sound.beep();
