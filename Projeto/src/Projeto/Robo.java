@@ -1,6 +1,9 @@
 package Projeto;
 
+import java.io.File;
+
 import Projeto.Robo;
+import lejos.hardware.Sound;
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
@@ -36,7 +39,6 @@ public class Robo
 	private static final EV3TouchSensor sensorToque = new EV3TouchSensor(s2);
 	private static final SampleProvider obtemAmostra = sensorToque.getTouchMode();
 	private static float[] amostra = new float[obtemAmostra.sampleSize()];
-	Coluna coluna;
 	
 	
 	//Construtor
@@ -225,8 +227,9 @@ public class Robo
 	//Outros
 	public void tocaSom(String ficheiro)
 	{
-		coluna = new Coluna(ficheiro);
-		coluna.start();
+		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
+		//Coluna coluna = new Coluna(ficheiro);
+		//coluna.start();
 	}
 	
 	public void recuperaEnergia()

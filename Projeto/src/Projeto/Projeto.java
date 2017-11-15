@@ -196,10 +196,13 @@ public class Projeto {
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
 		robo.tocaSom("som3"); //"Voltando a posicao 1"
+		//Coluna coluna = new Coluna("som3");
 		robo.mover(-1, 400);
 		while(robo.detetaCor() != Color.WHITE)
 			espera(20);
 		robo.parar();
+		//if(coluna.isAlive())
+		//	coluna.interrupt();
 		espera(500);
 		robo.mover(1, 200);
 		espera(800);
@@ -235,8 +238,7 @@ public class Projeto {
 			if(robo.getPosicaoAtual() < 6)
 				robo.moverPos(1, 1);
 			else
-				robo.setPosicaoAtual(robo.getPosicaoAtual() + 1);
-			espera(500);
+				break;
 		}
 		robo.tocaSom("som2"); //"Detecao de inimigos concluida"
 		voltarInicio();
@@ -299,26 +301,28 @@ public class Projeto {
 	public static void dadosRobo()
 	{
 		limpaEcra();
-		System.out.println("-------------");
-		System.out.println("Sinais vitais");
-		System.out.println("-------------\n\n");
-		System.out.println("Vida: " + robo.getVida() + " uv");
-		System.out.println("Energia: " + robo.getEnergia() + " en");
+		String out = "\n-------------";
+		out += "\nSinais vitais";
+		out +=  "\n-------------\n\n";
+		out += "\nVida: " + robo.getVida() + " uv";
+		out += "\nEnergia: " + robo.getEnergia() + " en";
+		imprime(out);
 	}
 	
 	public static void dadosInimigos()
 	{
 		limpaEcra();
 		int n = 1;
-		System.out.println("-------------");
-		System.out.println("   Inimigos   ");
-		System.out.println("-------------\n\n");
+		String out = "\n-------------";
+		out += "\n   Inimigos   ";
+		out += "\n-------------\n\n";
 		
 		for(Inimigo i : inimigos.values())
 		{
-			System.out.println(n + "-" + i.toString() + "-" + i.getVida());
+			out += "\n" + n + "-" + i.toString() + "-" + i.getVida();
 			n++;
 		}
+		imprime(out);
 	}
 	
 	public static void limpaEcra()
