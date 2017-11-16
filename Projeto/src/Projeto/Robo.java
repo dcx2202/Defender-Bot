@@ -138,15 +138,15 @@ public class Robo
 			ataqueToque(inimigo);
 		else if(inimigo.getVida() > 0 && energAtual > ENERSOM + 50)
 			ataqueSom(inimigo);
-		//if(inimigo.getVida() <= 0)
-			//tocaSom("som8");
+		if(inimigo.getVida() <= 0)
+			tocaSom("som8");
 	}
 	
 	public void ataqueSom(Inimigo inimigo)
 	{
 		energAtual -= ENERSOM;
-		inimigo.recebeDano(DANOSOM);
 		tocaSom("som27"); //"PewPew (laser)"
+		inimigo.recebeDano(DANOSOM);
 	}
 	
 	public void ataqueToque(Inimigo inimigo)
@@ -225,8 +225,6 @@ public class Robo
 	public void tocaSom(String ficheiro)
 	{
 		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
-		//Coluna coluna = new Coluna(ficheiro);
-		//coluna.start();
 	}
 	
 	public void recuperaEnergia()

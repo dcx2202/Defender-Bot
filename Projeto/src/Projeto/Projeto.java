@@ -193,16 +193,12 @@ public class Projeto {
 	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
-		//robo.tocaSom("som3"); //"Voltando a posicao 1"
-		//Coluna coluna = new Coluna("som3");
 		if(robo.getPosicaoAtual() != 1)
 		{
 			robo.mover(-1, 400);
 			while(robo.detetaCor() != Color.WHITE)
 				espera(20);
 			robo.parar();
-			//if(coluna.isAlive())
-			//	coluna.interrupt();
 			espera(500);
 			robo.mover(1, 200);
 			espera(800);
@@ -264,19 +260,14 @@ public class Projeto {
 		}
 		robo.setPosicaoAtual(1);
 		robo.tocaSom("som4"); //"Preparando-me para atacar"
-		//Coluna coluna = new Coluna("som4");
-		//coluna.start();
 		while(robo.getPosicaoAtual() <= posUltimoVivo)
 		{
-			dadosRobo();
-			robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
-			espera(500);
 			if(robo.getPosicaoAtual() < posUltimoVivo)
 			{
 				int posPrimeiroVivo = 1;
 				for(Inimigo inimigo : inimigos.values())
 				{
-					if(inimigo.posicao > robo.getPosicaoAtual() && inimigo.getVida() > 0)
+					if(inimigo.posicao >= robo.getPosicaoAtual() && inimigo.getVida() > 0)
 					{
 						posPrimeiroVivo = inimigo.posicao;
 						break;
@@ -286,6 +277,9 @@ public class Projeto {
 			}
 			else
 				break;
+			dadosRobo();
+			robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
+			espera(500);
 		}
 		espera(500);
 		voltarInicio();
@@ -294,8 +288,6 @@ public class Projeto {
 	public static void defender()
 	{
 		robo.tocaSom("som7"); //"Preparando-me para defender"
-		//Coluna coluna = new Coluna("som7");
-		//coluna.start();
 		for(Inimigo inimigo : inimigos.values())
 		{
 			if(inimigo.getVida() > 0)
@@ -347,9 +339,8 @@ public class Projeto {
 	
 	public static void limpaEcra()
 	{
-		LCD.clear();
+		LCD.clearDisplay();
 		LCD.refresh();
-		espera(500);
 	}
 	
 	public static void imprime(String string)
@@ -366,6 +357,4 @@ public class Projeto {
 	{
 		Delay.msDelay(ms);
 	}
-
-	
 }
