@@ -54,9 +54,7 @@ public class Projeto {
 			imprime("Fim do jogo");
 			imprime("----------\n");
 			imprime("Vitoria!");
-			imprime("Todos os inimigos foram abatidos.\n");
 			robo.tocaSom("som11"); //"Vitoria! Fim do jogo."
-			robo.festejar();
 			esperaToque();
 			System.exit(0);
 		}
@@ -85,7 +83,6 @@ public class Projeto {
 		
 		//Turno 2 - atacar
 		novoTurno(2); //"Turno 2"
-		robo.recuperaEnergia();
 		detetaInimigos();
 		dadosInimigos();
 		espera(2000);
@@ -198,17 +195,20 @@ public class Projeto {
 	{	
 		//robo.tocaSom("som3"); //"Voltando a posicao 1"
 		//Coluna coluna = new Coluna("som3");
-		robo.mover(-1, 400);
-		while(robo.detetaCor() != Color.WHITE)
-			espera(20);
-		robo.parar();
-		//if(coluna.isAlive())
-		//	coluna.interrupt();
-		espera(500);
-		robo.mover(1, 200);
-		espera(800);
-		robo.parar();
-		robo.setPosicaoAtual(1);
+		if(robo.getPosicaoAtual() != 1)
+		{
+			robo.mover(-1, 400);
+			while(robo.detetaCor() != Color.WHITE)
+				espera(20);
+			robo.parar();
+			//if(coluna.isAlive())
+			//	coluna.interrupt();
+			espera(500);
+			robo.mover(1, 200);
+			espera(800);
+			robo.parar();
+			robo.setPosicaoAtual(1);
+		}
 	}
 	
 	public static void detetaInimigos()
@@ -270,12 +270,24 @@ public class Projeto {
 		{
 			dadosRobo();
 			robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
-			
+			espera(500);
 			if(robo.getPosicaoAtual() < posUltimoVivo)
-				robo.moverPos(1, 1);
+			{
+				int posPrimeiroVivo = 1;
+				for(Inimigo inimigo : inimigos.values())
+				{
+					if(inimigo.posicao > robo.getPosicaoAtual() && inimigo.getVida() > 0)
+					{
+						posPrimeiroVivo = inimigo.posicao;
+						break;
+					}
+				}
+				robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual());
+			}
 			else
 				break;
 		}
+		espera(500);
 		voltarInicio();
 	}
 	
@@ -286,10 +298,13 @@ public class Projeto {
 		//coluna.start();
 		for(Inimigo inimigo : inimigos.values())
 		{
-			Sound.beep();
-			dadosRobo();
-			espera(1000);
-			robo.recebeDano((int)inimigo.getDano());
+			if(inimigo.getVida() > 0)
+			{
+				Sound.beep();
+				robo.recebeDano((int)inimigo.getDano());
+				dadosRobo();
+				espera(1000);
+			}
 		}
 	}
 		
@@ -334,7 +349,7 @@ public class Projeto {
 	{
 		LCD.clear();
 		LCD.refresh();
-		espera(10);
+		espera(500);
 	}
 	
 	public static void imprime(String string)

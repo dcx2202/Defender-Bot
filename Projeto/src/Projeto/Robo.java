@@ -46,7 +46,7 @@ public class Robo
 	{
 		vidaAtual = VIDAMAX;
 		energAtual = ENERGMAX;
-		posicaoAtual = 1;
+		posicaoAtual = -1;
 	}
 	
 	
@@ -132,17 +132,14 @@ public class Robo
 	//Ataque
 	public void escolheAtaque(Inimigo inimigo)
 	{
-		if(energAtual > 200)
-		{
-			if(inimigo.getVida() > 150)
-				ataqueGrua(inimigo);
-			else if(inimigo.getVida() > 50)
-				ataqueToque(inimigo);
-			else if(inimigo.getVida() > 0)
-				ataqueSom(inimigo);
-		}
-		if(inimigo.getVida() <= 0)
-			tocaSom("som8");
+		if(inimigo.getVida() > 150 && energAtual > ENERGGRUA + 50)
+			ataqueGrua(inimigo);
+		else if(inimigo.getVida() > 50 && energAtual > ENERGTOQUE + 50)
+			ataqueToque(inimigo);
+		else if(inimigo.getVida() > 0 && energAtual > ENERSOM + 50)
+			ataqueSom(inimigo);
+		//if(inimigo.getVida() <= 0)
+			//tocaSom("som8");
 	}
 	
 	public void ataqueSom(Inimigo inimigo)
@@ -240,25 +237,5 @@ public class Robo
 		else
 			energAtual = ENERGMAX;
 		Projeto.dadosRobo();
-	}
-	
-	public void festejar()
-	{
-		mover(-1, 800);
-		while(detetaCor() != Color.WHITE)
-			Projeto.espera(20);
-		mover(-1, 400);
-		Projeto.espera(2000);
-		parar();
-		Motor.A.setSpeed(1000);
-		Motor.B.setSpeed(1000);
-		Motor.A.forward();
-		Motor.B.backward();
-		tocaSom("som29");
-		tocaSom("som27");
-		tocaSom("som27");
-		tocaSom("som27");
-		tocaSom("som27");
-		parar();
 	}
 }
