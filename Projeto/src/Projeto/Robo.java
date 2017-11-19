@@ -51,7 +51,7 @@ public class Robo
 	
 	
 	//Movimento
-	public void mover(int direcao, int graus) // (1 -> frente  ;  -1 -> tras  ;  graus/s)
+	public void mover(int direcao, int graus) // (1 -> frente  ;  -1 -> atrás  ;  graus/s)
 	{
 		Motor.A.setSpeed(graus);
 		Motor.B.setSpeed(graus);
@@ -82,6 +82,8 @@ public class Robo
 		posicaoAtual = posicaoAtual + (direcao * numPosicoes);
 	}
 	
+	
+	
 	public void parar() //Para ambos os motores simultaneamente
 	{
 		Motor.A.stop(true);
@@ -89,11 +91,15 @@ public class Robo
 	}
 	
 	
+	
+	
 	//Sensores
 	public int detetaCor() //Retorna o id da cor detetada (0 se nao detetar nenhuma)
 	{
 		return sensorCor.getColorID();
 	}
+	
+	
 	
 	public boolean detetaToque()
 	{
@@ -221,11 +227,16 @@ public class Robo
 		}
 	}
 	
+	
+	
+	
 	//Outros
 	public void tocaSom(String ficheiro)
 	{
 		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
 	}
+	
+	
 	
 	public void recuperaEnergia()
 	{

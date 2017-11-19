@@ -8,8 +8,6 @@ import lejos.robotics.Color;
 import lejos.utility.Delay;
 
 
-//teste
-
 
 public class Projeto {
 
@@ -18,7 +16,7 @@ public class Projeto {
 	static TreeMap<Integer, Inimigo> inimigos = new TreeMap<>();
 	
 	
-	//Main
+	//----- função main ----------------------
 	public static void main(String[] args)
 	{
 		LCD.setAutoRefresh(false);
@@ -29,6 +27,8 @@ public class Projeto {
 	}
 
 	
+	
+	
 	//Metodos de jogo
 	public static void esperaToque()
 	{
@@ -36,6 +36,8 @@ public class Projeto {
 			espera(100);
 		espera(500);
 	}
+	
+	
 	
 	public static void fimJogo()
 	{
@@ -64,11 +66,17 @@ public class Projeto {
 		}
 	}
 	
+	
+	
+	
 	public static void novoTurno(int turno)
 	{
 		robo.tocaSom("som23"); //"Turno"
 		robo.tocaSom(turno + ""); //"1, 2, 3, ..."
 	}
+	
+	
+	
 	
 	public static void novoJogo()
 	{
@@ -195,6 +203,9 @@ public class Projeto {
 		fimJogo();
 	}
 	
+	
+	
+	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
 		if(robo.getPosicaoAtual() != 1)
@@ -210,6 +221,10 @@ public class Projeto {
 			robo.setPosicaoAtual(1);
 		}
 	}
+	
+	
+	
+	
 	
 	public static void detetaInimigos()
 	{
@@ -245,6 +260,9 @@ public class Projeto {
 		voltarInicio();
 	}
 	
+	
+	
+	
 	public static void decideJogada()
 	{
 		if(robo.getVida() < 200)
@@ -252,6 +270,9 @@ public class Projeto {
 		else
 			atacar();
 	}
+	
+	
+	
 	
 	public static void atacar()
 	{
@@ -289,6 +310,11 @@ public class Projeto {
 		voltarInicio();
 	}
 	
+	
+	
+	
+	
+	
 	public static void defender()
 	{
 		robo.tocaSom("som7"); //"Preparando-me para defender"
@@ -305,6 +331,9 @@ public class Projeto {
 	}
 		
 	
+	
+	
+	
 	//Outros
 	public static void preencheVazios()
 	{
@@ -313,6 +342,9 @@ public class Projeto {
 			registaInimigo(i, new Inimigo(3));
 		}
 	}
+	
+	
+	
 	
 	public static void dadosRobo()
 	{
