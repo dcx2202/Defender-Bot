@@ -7,6 +7,10 @@ import lejos.hardware.lcd.LCD;
 import lejos.robotics.Color;
 import lejos.utility.Delay;
 
+
+//teste
+
+
 public class Projeto {
 
 	//Criacao/Iniciacao de variaveis/objetos
