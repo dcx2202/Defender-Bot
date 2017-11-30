@@ -51,7 +51,7 @@ public class Robo
 	
 	
 	//Movimento
-	public void mover(int direcao, int graus) // (1 -> frente  ;  -1 -> atrás  ;  graus/s)
+	public void mover(int direcao, int graus) // (1 -> frente  ;  -1 -> tras  ;  graus/s)
 	{
 		Motor.A.setSpeed(graus);
 		Motor.B.setSpeed(graus);
@@ -75,14 +75,13 @@ public class Robo
 			mover(direcao, 200);
 			while(detetaCor() != Color.RED)
 				Projeto.espera(50);
-			Projeto.espera(700);
+			Projeto.espera(750);
 			pos--;
 		}
 		parar();
+		Projeto.espera(500);
 		posicaoAtual = posicaoAtual + (direcao * numPosicoes);
 	}
-	
-	
 	
 	public void parar() //Para ambos os motores simultaneamente
 	{
@@ -91,15 +90,11 @@ public class Robo
 	}
 	
 	
-	
-	
 	//Sensores
 	public int detetaCor() //Retorna o id da cor detetada (0 se nao detetar nenhuma)
 	{
 		return sensorCor.getColorID();
 	}
-	
-	
 	
 	public boolean detetaToque()
 	{
@@ -138,14 +133,28 @@ public class Robo
 	//Ataque
 	public void escolheAtaque(Inimigo inimigo)
 	{
-		if(inimigo.getVida() > 150 && energAtual > ENERGGRUA + 50)
-			ataqueGrua(inimigo);
-		else if(inimigo.getVida() > 50 && energAtual > ENERGTOQUE + 50)
-			ataqueToque(inimigo);
-		else if(inimigo.getVida() > 0 && energAtual > ENERSOM + 50)
-			ataqueSom(inimigo);
-		if(inimigo.getVida() <= 0)
-			tocaSom("som8");
+		if(Projeto.turno != 12)
+		{
+			if(inimigo.getVida() > 150 && energAtual > ENERGGRUA + 50)
+				ataqueGrua(inimigo);
+			else if(inimigo.getVida() > 50 && energAtual > ENERGTOQUE + 50)
+				ataqueToque(inimigo);
+			else if(inimigo.getVida() > 0 && energAtual > ENERSOM + 50)
+				ataqueSom(inimigo);
+			if(inimigo.getVida() <= 0)
+				tocaSom("som8");
+			}
+		else
+		{
+			if(inimigo.getVida() > 150 && energAtual >= ENERGGRUA)
+				ataqueGrua(inimigo);
+			else if(inimigo.getVida() > 50 && energAtual >= ENERGTOQUE)
+				ataqueToque(inimigo);
+			else if(inimigo.getVida() > 0 && energAtual >= ENERSOM)
+				ataqueSom(inimigo);
+			if(inimigo.getVida() <= 0)
+				tocaSom("som8");
+		}
 	}
 	
 	public void ataqueSom(Inimigo inimigo)
@@ -227,16 +236,11 @@ public class Robo
 		}
 	}
 	
-	
-	
-	
 	//Outros
 	public void tocaSom(String ficheiro)
 	{
 		Sound.playSample(new File("/home/root/" + ficheiro + ".wav"), 100);
 	}
-	
-	
 	
 	public void recuperaEnergia()
 	{

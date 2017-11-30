@@ -2,32 +2,29 @@ package Projeto;
 
 import java.util.TreeMap;
 
-import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.Color;
 import lejos.utility.Delay;
-
-
 
 public class Projeto {
 
 	//Criacao/Iniciacao de variaveis/objetos
 	static Robo robo = new Robo();
 	static TreeMap<Integer, Inimigo> inimigos = new TreeMap<>();
+	static int turno = 0;
 	
 	
-	//----- função main ----------------------
+	//Main
 	public static void main(String[] args)
 	{
 		LCD.setAutoRefresh(false);
 		preencheVazios();
 		robo.tocaSom("som3"); //"Voltando a posicao 1"
 		voltarInicio();
+		turno = 0;
 		novoJogo();
 	}
 
-	
-	
 	
 	//Metodos de jogo
 	public static void esperaToque()
@@ -36,8 +33,6 @@ public class Projeto {
 			espera(100);
 		espera(500);
 	}
-	
-	
 	
 	public static void fimJogo()
 	{
@@ -66,17 +61,12 @@ public class Projeto {
 		}
 	}
 	
-	
-	
-	
-	public static void novoTurno(int turno)
+	public static void novoTurno(int t)
 	{
 		robo.tocaSom("som23"); //"Turno"
-		robo.tocaSom(turno + ""); //"1, 2, 3, ..."
+		robo.tocaSom(t + ""); //"1, 2, 3, ..."
+		turno = t;
 	}
-	
-	
-	
 	
 	public static void novoJogo()
 	{
@@ -203,9 +193,6 @@ public class Projeto {
 		fimJogo();
 	}
 	
-	
-	
-	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
 		if(robo.getPosicaoAtual() != 1)
@@ -222,77 +209,92 @@ public class Projeto {
 		}
 	}
 	
-	
-	
-	
-	
 	public static void detetaInimigos()
 	{
-		robo.tocaSom("som16"); //"Detetando inimigos"
-		while(robo.getPosicaoAtual() <= 6)
+		if(inimigos.get(6).getId() == 3)
 		{
-			if(inimigos.get(robo.getPosicaoAtual()).getId() == 3)
+			robo.tocaSom("som16"); //"Detetando inimigos"
+			while(robo.getPosicaoAtual() <= 6)
 			{
-				if(robo.detetaCor() == Color.BLUE)
+				if(inimigos.get(robo.getPosicaoAtual()).getId() == 3)
 				{
-					robo.tocaSom("som17");
-					registaInimigo(robo.getPosicaoAtual(), new Inimigo(0));
+					if(robo.detetaCor() == Color.BLUE)
+					{
+						robo.tocaSom("som17");
+						registaInimigo(robo.getPosicaoAtual(), new Inimigo(0));
+					}
+					else if(robo.detetaCor() == Color.BLACK)
+					{
+						robo.tocaSom("som18");
+						registaInimigo(robo.getPosicaoAtual(), new Inimigo(2));
+					}
+					else if(robo.detetaCor() == Color.YELLOW)
+					{
+						robo.tocaSom("som19");
+						registaInimigo(robo.getPosicaoAtual(), new Inimigo(1));
+					}
+					else if(robo.detetaCor() == Color.NONE)
+						break;
 				}
-				else if(robo.detetaCor() == Color.BLACK)
-				{
-					robo.tocaSom("som18");
-					registaInimigo(robo.getPosicaoAtual(), new Inimigo(2));
-				}
-				else if(robo.detetaCor() == Color.YELLOW)
-				{
-					robo.tocaSom("som19");
-					registaInimigo(robo.getPosicaoAtual(), new Inimigo(1));
-				}
-				else if(robo.detetaCor() == Color.NONE)
+				if(robo.getPosicaoAtual() < 6)
+					robo.moverPos(1, 1);
+				else
 					break;
 			}
-			if(robo.getPosicaoAtual() < 6)
-				robo.moverPos(1, 1);
-			else
-				break;
+			robo.tocaSom("som2"); //"Detecao de inimigos concluida"
+			voltarInicio();
 		}
-		robo.tocaSom("som2"); //"Detecao de inimigos concluida"
-		voltarInicio();
 	}
-	
-	
-	
 	
 	public static void decideJogada()
 	{
+		boolean tudoCheioEMorto = true;
+		if(inimigos.get(6).getId() != 3) //tudo cheio
+		{
+			for(Inimigo inimigo : inimigos.values())
+			{
+				if(inimigo.getVida() > 0)
+				{
+					tudoCheioEMorto = false;
+					break;
+				}
+			}
+			if(tudoCheioEMorto)
+				fimJogo();
+		}
 		if(robo.getVida() < 200)
 			robo.curar();
 		else
 			atacar();
+		
 	}
-	
-	
-	
 	
 	public static void atacar()
 	{
-		int posUltimoVivo = -1;
+		int posUltimoVivo = 0;
+		
 		for(Inimigo inimigo : inimigos.values())
 		{
 			if(inimigo.getVida() > 0)
 				if(inimigo.posicao > posUltimoVivo)
 					posUltimoVivo = inimigo.posicao;
 		}
+		
 		robo.setPosicaoAtual(1);
 		robo.tocaSom("som4"); //"Preparando-me para atacar"
+		
 		while(robo.getPosicaoAtual() <= posUltimoVivo)
 		{
+			dadosRobo();
+			if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0)
+				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
+			espera(500);
 			if(robo.getPosicaoAtual() < posUltimoVivo)
 			{
-				int posPrimeiroVivo = 1;
+				int posPrimeiroVivo = -1;
 				for(Inimigo inimigo : inimigos.values())
 				{
-					if(inimigo.posicao >= robo.getPosicaoAtual() && inimigo.getVida() > 0)
+					if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual())
 					{
 						posPrimeiroVivo = inimigo.posicao;
 						break;
@@ -302,18 +304,10 @@ public class Projeto {
 			}
 			else
 				break;
-			dadosRobo();
-			robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
-			espera(500);
 		}
 		espera(500);
 		voltarInicio();
 	}
-	
-	
-	
-	
-	
 	
 	public static void defender()
 	{
@@ -322,7 +316,7 @@ public class Projeto {
 		{
 			if(inimigo.getVida() > 0)
 			{
-				Sound.beep();
+				//Sound.beep();
 				robo.recebeDano((int)inimigo.getDano());
 				dadosRobo();
 				espera(1000);
@@ -330,9 +324,6 @@ public class Projeto {
 		}
 	}
 		
-	
-	
-	
 	
 	//Outros
 	public static void preencheVazios()
@@ -342,9 +333,6 @@ public class Projeto {
 			registaInimigo(i, new Inimigo(3));
 		}
 	}
-	
-	
-	
 	
 	public static void dadosRobo()
 	{
