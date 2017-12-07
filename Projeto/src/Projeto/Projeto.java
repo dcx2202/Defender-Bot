@@ -2,6 +2,7 @@ package Projeto;
 
 import java.util.TreeMap;
 
+import lejos.hardware.Sound;
 import lejos.hardware.lcd.LCD;
 import lejos.robotics.Color;
 import lejos.utility.Delay;
@@ -316,7 +317,7 @@ public class Projeto {
 		{
 			if(inimigo.getVida() > 0)
 			{
-				//Sound.beep();
+				Sound.beep();
 				robo.recebeDano((int)inimigo.getDano());
 				dadosRobo();
 				espera(1000);
