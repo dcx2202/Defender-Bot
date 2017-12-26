@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 public class Simulacao
 {
-	private static int turno = 0;
+	static int turno = 0;
 	static int vitorias = 0;
     static int derrotas = 0;
     static TreeMap<Integer, Inimigo> inimigos = new TreeMap<Integer, Inimigo>();
@@ -340,7 +340,8 @@ public class Simulacao
     
     public static void decideJogada()
     {
-        if (robo.getVida() < Simulador.VIDA_CURAR)
+    	robo.escolheEstrategia();
+        if (robo.getVida() < Robo.VIDA_CURAR)
         {
             robo.curar();
         } 
@@ -352,7 +353,8 @@ public class Simulacao
     
     public static void decideJogadaPrint()
     {
-        if (robo.getVida() < Simulador.VIDA_CURAR)
+    	robo.escolheEstrategiaPrint();
+        if (robo.getVida() < Robo.VIDA_CURAR)
         {
             System.out.println("Curar");
             robo.curarPrint();

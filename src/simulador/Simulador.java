@@ -10,19 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Simulador
-{
-
-    static final int VIDA_CURAR = 200;		//se a vida do robo < VIDA_CURAR entao cura
-    static final int ENERG_ATAQUE_RES = 50;	//energia de reserva ao atacar
-    static final int ENERG_CURA_RES = 50;		//energia de reserva ao curar
-    static final int VIDA_CURA1 = 300;		//vida do robo <= VIDA_CURA1 para usar a cura1
-    static final int VIDA_CURA2 = 200;		//vida do robo <= VIDA_CURA2 para usar a cura2
-    static final int VIDA_CURA3 = 100;		//vida do robo <= VIDA_CURA3 para usar a cura3
-    static final int VIDA_INI_GRUA = 150;		//vida do inimigo > VIDA_INI_GRUA para usar o ataque de grua
-    static final int VIDA_INI_TOQUE = 50;	//vida do inimigo > VIDA_INI_TOQUE para usar o ataque de toque
-    static final int VIDA_INI_SOM = 0;		//vida do inimigo > VIDA_INI_SOM para usar o ataque de som
-	
-    
+{ 
     static int tipoInimigo[];
     static int turnoInimigo[];
     
