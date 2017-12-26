@@ -263,7 +263,8 @@ public class Projeto {
 			if(tudoCheioEMorto)
 				fimJogo();
 		}
-		if(robo.getVida() < 200)
+		robo.escolheEstrategia();
+		if(robo.getVida() < Robo.VIDA_CURAR)
 			robo.curar();
 		else
 			atacar();
