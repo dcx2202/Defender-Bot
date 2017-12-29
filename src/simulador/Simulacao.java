@@ -367,6 +367,8 @@ public class Simulacao
     {
     	if(turno == 12)
     		Robo.estrategia("ataquemax");
+    	else if(inimigos.get(6).getId() != 3 && robo.getVida() >= 150)
+    		Robo.estrategia("sosom");
     	else
     		robo.escolheEstrategia();
         if (robo.getVida() < Robo.VIDA_CURAR)
@@ -385,6 +387,11 @@ public class Simulacao
     	{
     		Robo.estrategia("ataquemax");
     		System.out.println("Perfil ataquemax escolhido!\n");
+    	}
+    	else if(inimigos.get(6).getId() != 3 && robo.getVida() >= 150)
+    	{
+    		Robo.estrategia("sosom");
+    		System.out.println("Perfil sosom escolhido!\n");
     	}
     	else
     		robo.escolheEstrategiaPrint();
