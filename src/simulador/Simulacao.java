@@ -45,7 +45,7 @@ public class Simulacao
         preencheArray(Simulador.turnoInimigo);
     }
 	
-    public static void novoJogo() 
+    public static void novoJogo()
     {
         robo.setVidaAtual(750);
         robo.setEnergAtual(500);
@@ -127,53 +127,66 @@ public class Simulacao
     public static void novoJogo(String str1, String str) throws IOException
 	{
 		//Turno 1
-		
+    	turno = 1;
+    	
 		//Turno 2
+    	turno++;
 		robo.recuperaEnergia();
 		registaInimigos(str1.toCharArray()[0], str);
 		decideJogada();
 		
 		//Turno 3
+		turno++;
 		defender();
 		
 		//Turno 4
+		turno++;
 		robo.recuperaEnergia();
 		registaInimigos(str1.toCharArray()[1], str);
 		decideJogada();
 		
 		//Turno 5
+		turno++;
 		defender();
 		
 		//Turno 6
+		turno++;
 		robo.recuperaEnergia();
 		registaInimigos(str1.toCharArray()[2], str);
 		decideJogada();
 		
 		//Turno 7
+		turno++;
 		defender();
 		
 		//Turno 8
+		turno++;
 		robo.recuperaEnergia();
 		registaInimigos(str1.toCharArray()[3], str);
 		decideJogada();
 		
 		//Turno 9
+		turno++;
 		defender();
 		
 		//Turno 10
+		turno++;
 		robo.recuperaEnergia();
 		registaInimigos(str1.toCharArray()[4], str);
 		decideJogada();
 		
 		//Turno 11
+		turno++;
 		defender();
 		
 		//Turno 12
+		turno++;
 		robo.recuperaEnergia();
 		registaInimigos(str1.toCharArray()[5], str);
 		decideJogada();
 		
 		//Turno 13
+		turno++;
 		defender();
 		fimJogo();
 	}
@@ -293,15 +306,27 @@ public class Simulacao
     {
         for (Inimigo inimigo : inimigos.values())
         {
-            robo.escolheAtaque(inimigo);
+        	if(inimigo.getId() == 1)
+        		robo.escolheAtaque(inimigo);
+        }
+        for (Inimigo inimigo : inimigos.values())
+        {
+        	if(inimigo.getId() != 1 && inimigo.getId() != 3)
+        		robo.escolheAtaque(inimigo);
         }
     }
     
     public static void atacarPrint()
     {
+    	for (Inimigo inimigo : inimigos.values())
+        {
+        	if(inimigo.getId() == 1)
+        		robo.escolheAtaquePrint(inimigo);
+        }
         for (Inimigo inimigo : inimigos.values())
         {
-            robo.escolheAtaquePrint(inimigo);
+        	if(inimigo.getId() != 1 && inimigo.getId() != 3)
+        		robo.escolheAtaquePrint(inimigo);
         }
     }
     
@@ -340,7 +365,10 @@ public class Simulacao
     
     public static void decideJogada()
     {
-    	robo.escolheEstrategia();
+    	if(turno == 12)
+    		Robo.estrategia("ataquemax");
+    	else
+    		robo.escolheEstrategia();
         if (robo.getVida() < Robo.VIDA_CURAR)
         {
             robo.curar();
@@ -353,7 +381,14 @@ public class Simulacao
     
     public static void decideJogadaPrint()
     {
-    	robo.escolheEstrategiaPrint();
+    	if(turno == 12)
+    	{
+    		
+    		Robo.estrategia("ataquemax");
+    		System.out.println("Perfil ataquemax escolhido!\n");
+    	}
+    	else
+    		robo.escolheEstrategiaPrint();
         if (robo.getVida() < Robo.VIDA_CURAR)
         {
             System.out.println("Curar");
