@@ -383,7 +383,6 @@ public class Simulacao
     {
     	if(turno == 12)
     	{
-    		
     		Robo.estrategia("ataquemax");
     		System.out.println("Perfil ataquemax escolhido!\n");
     	}
