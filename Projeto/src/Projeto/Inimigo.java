@@ -2,42 +2,44 @@ package Projeto;
 
 public class Inimigo {
 
-	private static final int vidaTanque = 200;
-	private static final int vidaArt = 50;
-	private static final int vidaInf = 100;
-	private static final int forcaTanque = 200;
-	private static final int forcaArt = 500;
-	private static final int forcaInf = 100;
-	private int vidaAtual;
-	private int vidaMax;
+	//Definicao e inicializacao de constantes e variaveis
+	private static final int vidaTanque = 200;	//vida dos tanques	
+	private static final int vidaArt = 50;		//vida das artilharias	
+	private static final int vidaInf = 100;		//vida das infantarias	
+	private static final int forcaTanque = 200;	//forÃ§a dos tanques
+	private static final int forcaArt = 500;	//forÃ§a das artilharias
+	private static final int forcaInf = 100;	//forÃ§a das infantarias	
+	private int vidaAtual;						
+	private int vidaMax;						
 	private int forca;
 	private int id; //0-tanque, 1-artilharia, 2-infantaria, 3-vazio;
 	int posicao;
 	
+	//Construtor
 	public Inimigo(int id)
 	{
 		this.id = id;
 		this.posicao = Robo.posicaoAtual;
 		
-		if (id == 0)
+		if (id == 0)		//se o inimigo for um tanque
 		{
 			vidaAtual = vidaTanque;
 			vidaMax = vidaTanque;
 			forca = forcaTanque;
 		}
-		else if (id == 1)
+		else if (id == 1)	//se o inimigo for uma artilharia
 		{
 			vidaAtual = vidaArt;
 			vidaMax = vidaArt;
 			forca = forcaArt;
 		}
-		else if (id == 2)
+		else if (id == 2)	//se o inimigo for uma infantaria
 		{
 			vidaAtual = vidaInf;
 			vidaMax = vidaInf;
 			forca = forcaInf;
 		}
-		else if (id == 3)
+		else if (id == 3)	//se nao existir inimigo 
 		{
 			vidaAtual = 0;
 			vidaMax = 0;
@@ -45,6 +47,7 @@ public class Inimigo {
 		}
 	}
 	
+	//Getters
 	public int getId()
 	{
 		return id;
@@ -55,30 +58,31 @@ public class Inimigo {
 		return vidaAtual;
 	}
 	
+	public double getDano()		//dano dado pelos inimigos
+	{
+		if(id != 3)		//se o inimigo existir (nao ser uma posicao vazia)
+			return forca*((double)vidaAtual/vidaMax);	//calcula a forca com que os inimigos atacam o robo
+		else
+			return 0;
+	}
+	
+	//Setters
 	public void setVida(int valor)
 	{
 		vidaAtual = valor;
 	}
 	
-	public void recebeDano(int valor)
+	public void recebeDano(int valor)	//dano recebido pelos inimigos
 	{
-		if(vidaAtual-valor < 0)
+		if(vidaAtual-valor < 0)		//se o inimigo ficar com vida negativa
 		{
-			vidaAtual = 0;
+			vidaAtual = 0;			
 		}
 		else
 			vidaAtual -=valor;
 	}
 	
-	public double getDano()
-	{
-		if(id != 3)
-			return forca*((double)vidaAtual/vidaMax);
-		else
-			return 0;
-	}
-	
-	public String toString()
+	public String toString() 	//retorna a string com os dados do inimigo
 	{
 		String string = "";
 		if(id == 0)

@@ -21,9 +21,9 @@ public class Projeto {
 		LCD.setAutoRefresh(false);
 		preencheVazios();
 		robo.tocaSom("som3"); //"Voltando a posicao 1"
-		voltarInicio();
+		voltarInicio();			//o robo volta ao inicio do tabuleiro
 		turno = 0;
-		novoJogo();
+		novoJogo();				//chama o metodo "principal" do jogo
 	}
 
 	
@@ -35,9 +35,11 @@ public class Projeto {
 		espera(500);
 	}
 	
+	
+	//Metodo chamado no fim do jogo
 	public static void fimJogo()
 	{
-		if(robo.getVida() == 0)
+		if(robo.getVida() == 0)    //se a vida do robo for 0 quando o jogo tiver acabado
 		{
 			limpaEcra();
 			imprime("\n\n----------");
@@ -62,6 +64,8 @@ public class Projeto {
 		}
 	}
 	
+	
+	//Metodo chamado no inicio de cada turno, dizendo o numero do turno a iniciar
 	public static void novoTurno(int t)
 	{
 		robo.tocaSom("som23"); //"Turno"
@@ -69,12 +73,14 @@ public class Projeto {
 		turno = t;
 	}
 	
+	
+	//Metodo "principal" do jogo
 	public static void novoJogo()
 	{
 		//Espera para comecar o jogo
 		robo.tocaSom("som20"); //"Pressione o botao para comecar"
-		esperaToque();
-		dadosRobo();
+		esperaToque();		   //Fica em pausa ate ser o botao "lateral" do robo ser carregado
+		dadosRobo();		   //Mostra os dados do robo no ecran (vida, energia, etc)
 		robo.tocaSom("som10"); //"Comecando o jogo"
 		
 		
@@ -86,18 +92,18 @@ public class Projeto {
 		
 		//Turno 2 - atacar
 		novoTurno(2); //"Turno 2"
-		detetaInimigos();
-		dadosInimigos();
+		detetaInimigos();		//Robo percorre as posiÃ§oes dos inimigos, guardando o tipo de inimigo, ate encontrar uma posiÃ§ao vazia ou ja ter detetado todos os 6 inimigos
+		dadosInimigos();		//Mostra os dados dos inimigos no ecran (tipo de inimigo, vida)
 		espera(2000);
 		dadosRobo();
 		espera(1500);
-		decideJogada();
-		dadosInimigos();
+		decideJogada();			//Decide se vai atacar ou curar
+		dadosInimigos();		//Mostra os dados dos inimigos no ecran (tipo de inimigo, vida) apos serem atacados
 		
 		//Turno 3 - espera que coloque os inimigos no tabuleiro para os detetar
 		novoTurno(3); //"Turno 3"
-		defender();
-		robo.tocaSom("som24"); //"Coloque os inimigos e pressione o botao para continuar"
+		defender();				//Efetua o calculo do dano proveniente dos inimigos e subtrai esse dano Ã  vida do robo
+		robo.tocaSom("som24");  //"Coloque os inimigos e pressione o botao para continuar"
 		dadosRobo();
 		esperaToque();
 		
@@ -196,45 +202,45 @@ public class Projeto {
 	
 	public static void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
 	{	
-		if(robo.getPosicaoAtual() != 1)
+		if(robo.getPosicaoAtual() != 1)					//se o robo nao estiver na posiÃ§ao 1
 		{
-			robo.mover(-1, 400);
-			while(robo.detetaCor() != Color.WHITE)
+			robo.mover(-1, 400);						//robo move-se em direÃ§ao Ã  posiÃ§ao 1
+			while(robo.detetaCor() != Color.WHITE)		//enquanto nao deteta a cor branca
 				espera(20);
-			robo.parar();
+			robo.parar();								//robo pÃ¡ra
 			espera(500);
-			robo.mover(1, 200);
+			robo.mover(1, 200);						
 			espera(800);
 			robo.parar();
 			robo.setPosicaoAtual(1);
 		}
 	}
 	
-	public static void detetaInimigos()
+	public static void detetaInimigos()	//Robo percorre as posiÃ§oes dos inimigos, guardando o tipo de inimigo, ate encontrar uma posiÃ§ao vazia ou ja ter detetado todos os 6 inimigos
 	{
-		if(inimigos.get(6).getId() == 3)
+		if(inimigos.get(6).getId() == 3)	//se ainda nao tiverem sido detetados todos os 6 inimigos (posiÃ§ao 6 do array de inimigos estÃ¡ vazia)
 		{
 			robo.tocaSom("som16"); //"Detetando inimigos"
-			while(robo.getPosicaoAtual() <= 6)
+			while(robo.getPosicaoAtual() <= 6)		//enquanto nao chegar Ã  posiÃ§ao 6
 			{
-				if(inimigos.get(robo.getPosicaoAtual()).getId() == 3)
+				if(inimigos.get(robo.getPosicaoAtual()).getId() == 3)	//se a posiÃ§ao atual do robo nao tiver inimigos anteriormente detetados
 				{
-					if(robo.detetaCor() == Color.BLUE)
+					if(robo.detetaCor() == Color.BLUE)	//se nessa posiÃ§ao detetar azul
 					{
 						robo.tocaSom("som17");
-						registaInimigo(robo.getPosicaoAtual(), new Inimigo(0));
+						registaInimigo(robo.getPosicaoAtual(), new Inimigo(0));		//regista um tanque ao array de inimigos
 					}
-					else if(robo.detetaCor() == Color.BLACK)
+					else if(robo.detetaCor() == Color.BLACK)	//se nessa posiÃ§ao detetar preto
 					{
 						robo.tocaSom("som18");
-						registaInimigo(robo.getPosicaoAtual(), new Inimigo(2));
+						registaInimigo(robo.getPosicaoAtual(), new Inimigo(2));		//regista uma infantaria ao array de inimigos
 					}
-					else if(robo.detetaCor() == Color.YELLOW)
+					else if(robo.detetaCor() == Color.YELLOW)	//se nessa posiÃ§ao detetar amarelo
 					{
 						robo.tocaSom("som19");
-						registaInimigo(robo.getPosicaoAtual(), new Inimigo(1));
+						registaInimigo(robo.getPosicaoAtual(), new Inimigo(1));		//regista uma artilharia ao array de inimigos
 					}
-					else if(robo.detetaCor() == Color.NONE)
+					else if(robo.detetaCor() == Color.NONE)		//se nessa posiÃ§ao nao detetar nenhuma cor, acabou a deteÃ§ao de inimigos
 						break;
 				}
 				if(robo.getPosicaoAtual() < 6)
@@ -250,77 +256,104 @@ public class Projeto {
 	public static void decideJogada()
 	{
 		boolean tudoCheioEMorto = true;
-		if(inimigos.get(6).getId() != 3) //tudo cheio
+		if(inimigos.get(6).getId() != 3) //se ja foram detetados todos os inimigos
 		{
-			for(Inimigo inimigo : inimigos.values())
+			for(Inimigo inimigo : inimigos.values())	//para cada inimigo
 			{
-				if(inimigo.getVida() > 0)
+				if(inimigo.getVida() > 0)		//se o inimigo estiver vivo
 				{
 					tudoCheioEMorto = false;
 					break;
 				}
 			}
-			if(tudoCheioEMorto)
-				fimJogo();
+			if(tudoCheioEMorto)		//se todos os inimigos estao mortos
+				fimJogo();			//acaba o jogo
 		}
-		robo.escolheEstrategia();
-		if(robo.getVida() < Robo.VIDA_CURAR)
-			robo.curar();
+		if(turno == 12)				//se o turno for o ultimo turno do robo (ultima possibilidade de ataque ou cura)
+    		Robo.estrategia("ataquemax");	//o robo utiliza toda a sua energia no ataque
+    	else if(inimigos.get(6).getId() != 3 && robo.getVida() >= 150)		//se ja tiverem sido detetados todos os inimigos e o robo tiver pelo menos 150 de vida
+    		Robo.estrategia("sosom");	//o robo utiliza apenas ataques de som
+    	else
+    		robo.escolheEstrategia();	//o robo decide a melhor estrategia
+		if(robo.getVida() < Robo.VIDA_CURAR)	//se a vida do robo for menor que o parametro VIDA_CURAR 
+			robo.curar();		//o robo cura-se
 		else
-			atacar();
+			atacar();			//o robo ataca
 		
 	}
 	
 	public static void atacar()
 	{
 		int posUltimoVivo = 0;
+		robo.setPosicaoAtual(1);
 		
-		for(Inimigo inimigo : inimigos.values())
+		robo.tocaSom("som4"); //"Preparando-me para atacar"
+		
+		for(Inimigo inimigo : inimigos.values())		//para cada inimigo
 		{
-			if(inimigo.getVida() > 0)
+			if(inimigo.getVida() > 0 && inimigo.getId() == 1) //se for uma artilharia e estiver viva
+				if(inimigo.posicao > posUltimoVivo) //fica com a posicao da ultima viva
+					posUltimoVivo = inimigo.posicao;
+		}
+		
+		for(Inimigo inimigo : inimigos.values())		//para cada inimigo
+		{
+			if(inimigo.getId() == 1) //Tenta atacar primeiro as artilharias
+			{
+				dadosRobo();
+				robo.moverPos(1, inimigo.posicao); //Move-se ate a primeira
+				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual())); //Escolhe o ataque
+				if(robo.getPosicaoAtual() >= posUltimoVivo) //Quando estiver na posicao da ultima
+					voltarInicio(); //Volta ao inicio do tabuleiro
+			}
+		}
+		
+		posUltimoVivo = 0;
+		for(Inimigo inimigo : inimigos.values())		//para cada inimigo
+		{
+			if(inimigo.getVida() > 0 && inimigo.getId() != 1) //fica com a posicao do ultimo inimigo vivo que nao seja uma artilharia
 				if(inimigo.posicao > posUltimoVivo)
 					posUltimoVivo = inimigo.posicao;
 		}
 		
 		robo.setPosicaoAtual(1);
-		robo.tocaSom("som4"); //"Preparando-me para atacar"
 		
-		while(robo.getPosicaoAtual() <= posUltimoVivo)
+		while(robo.getPosicaoAtual() <= posUltimoVivo)		//enquanto o robo nao chegar ao ultimo inimigo vivo
 		{
 			dadosRobo();
-			if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0)
-				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
-			espera(500);
-			if(robo.getPosicaoAtual() < posUltimoVivo)
+			if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0 && inimigos.get(robo.getPosicaoAtual()).getId() != 1) //Se o inimigo estiver vivo e nao for uma artilharia
+				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual())); //Escolhe um ataque
+			espera(500); //Espera 500 milisegundos
+			if(robo.getPosicaoAtual() < posUltimoVivo) //Enquanto nao estiver na posicao do ultimo vivo
 			{
 				int posPrimeiroVivo = -1;
-				for(Inimigo inimigo : inimigos.values())
+				for(Inimigo inimigo : inimigos.values())	//para cada inimigo
 				{
-					if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual())
+					if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual()) //Procura o primeiro inimigo vivo que ainda nao tenha sido atacado
 					{
 						posPrimeiroVivo = inimigo.posicao;
 						break;
 					}
 				}
-				robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual());
+				robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual()); //Move-se ate ao primeiro inimigo vivo por atacar
 			}
 			else
 				break;
 		}
 		espera(500);
-		voltarInicio();
+		voltarInicio(); //Volta ao inicio
 	}
 	
-	public static void defender()
+	public static void defender()		
 	{
 		robo.tocaSom("som7"); //"Preparando-me para defender"
-		for(Inimigo inimigo : inimigos.values())
+		for(Inimigo inimigo : inimigos.values())	//para cada inimigo
 		{
-			if(inimigo.getVida() > 0)
+			if(inimigo.getVida() > 0)	//se o inimigo estiver vivo
 			{
 				Sound.beep();
-				robo.recebeDano((int)inimigo.getDano());
-				dadosRobo();
+				robo.recebeDano((int)inimigo.getDano());	//Efetua o calculo do dano proveniente dos inimigos e subtrai esse dano Ã  vida do robo
+				dadosRobo();	//imprime os dados do robo		
 				espera(1000);
 			}
 		}
@@ -328,7 +361,7 @@ public class Projeto {
 		
 	
 	//Outros
-	public static void preencheVazios()
+	public static void preencheVazios()		//preenche o array inimigos com vazios
 	{
 		for(int i = 1 ; i <= 6 ; i++)
 		{
@@ -336,7 +369,7 @@ public class Projeto {
 		}
 	}
 	
-	public static void dadosRobo()
+	public static void dadosRobo()		//Mostra os dados do robo (vida e energia)
 	{
 		limpaEcra();
 		String out = "\n-------------";
@@ -347,7 +380,7 @@ public class Projeto {
 		imprime(out);
 	}
 	
-	public static void dadosInimigos()
+	public static void dadosInimigos()		//Mostra os dados dos inimigos no ecran (tipo de inimigo, vida)
 	{
 		limpaEcra();
 		int n = 1;
@@ -355,7 +388,7 @@ public class Projeto {
 		out += "\n   Inimigos   ";
 		out += "\n-------------\n\n";
 		
-		for(Inimigo i : inimigos.values())
+		for(Inimigo i : inimigos.values())		//para cada inimigo
 		{
 			out += "\n" + n + "-" + i.toString() + "-" + i.getVida();
 			n++;
@@ -363,23 +396,23 @@ public class Projeto {
 		imprime(out);
 	}
 	
-	public static void limpaEcra()
+	public static void limpaEcra()		//limpa o ecra
 	{
 		LCD.clearDisplay();
 		LCD.refresh();
 	}
 	
-	public static void imprime(String string)
+	public static void imprime(String string)	//imprime no ecra
 	{
 		System.out.println(string);
 	}
 	
-	public static void registaInimigo(int posicao, Inimigo inimigo)
+	public static void registaInimigo(int posicao, Inimigo inimigo)		//adiciona inimigos ao array inimigos
 	{
 		inimigos.put(posicao, inimigo);
 	}
 
-	public static void espera(int ms)
+	public static void espera(int ms)		//espera x tempo
 	{
 		Delay.msDelay(ms);
 	}
