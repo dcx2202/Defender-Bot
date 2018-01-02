@@ -4,26 +4,26 @@ import java.util.TreeMap;
 
 public class Robo 
 {
-	//Criacao/Iniciacao de variaveis/objetos
-    private static final int VIDAMAX = 750;
-    private static final int ENERGMAX = 500;
-    private static final int CURA1 = 100;
-    private static final int CURA2 = 200;
-    private static final int CURA3 = 400;
-    private static final int ENERGCURA1 = 100;
-    private static final int ENERGCURA2 = 200;
-    private static final int ENERGCURA3 = 400;
-    private static final int ENERGGRUA = 300;
-    private static final int ENERGSOM = 50;
-    private static final int ENERGTOQUE = 150;
-    private static final int DANOGRUA = 200;
-    private static final int DANOSOM = 50;
-    private static final int DANOTOQUE = 100;
-    private int energAtual;
-    private int vidaAtual;
-    static int posicaoAtual;
+	//Definicao e iniciacao de variaveis e constantes
+    private static final int VIDAMAX = 750; 		//Vida maxima do robo
+    private static final int ENERGMAX = 500; 		//Energia maxima do robo
+    private static final int CURA1 = 100; 		//Vida recuperada com a cura 1
+    private static final int CURA2 = 200; 		//Vida recuperada com a cura 2
+    private static final int CURA3 = 400; 		//Vida recuperada com a cura 3
+    private static final int ENERGCURA1 = 100; 	//Energia gasta pela cura 1
+    private static final int ENERGCURA2 = 200; 	//Energia gasta pela cura 2
+    private static final int ENERGCURA3 = 400;	//Energia gasta pela cura 3
+    private static final int ENERGGRUA = 300; 	//Energia gasta pelo ataque de grua
+    private static final int ENERGSOM = 50; 		//Energia gasta pelo ataque de som
+    private static final int ENERGTOQUE = 150; 	//Energia gasta pelo ataque de toque
+    private static final int DANOGRUA = 200; 		//Dano do ataque de grua
+    private static final int DANOSOM = 50; 		//Dano do ataque de som
+    private static final int DANOTOQUE = 100; 	//Dano do ataque de toque
+    private int energAtual;							//Energia atual do robo
+    private int vidaAtual;							//Vida atual do robo
+    static int posicaoAtual;						//Posicao atual do robo
     
-    //Variaveis fase 2
+    //Variaveis dos perfis
     static int VIDA_CURAR = 200;		//se a vida do robo < VIDA_CURAR entao cura
     static int ENERG_ATAQUE_RES = 50;	//energia de reserva ao atacar
     static int ENERG_CURA_RES = 50;		//energia de reserva ao curar
@@ -43,64 +43,67 @@ public class Robo
     }
 
     //Getters
+    //Retorna a energia atual
     public int getEnergDisponivel() 
     {
         return energAtual;
     }
 
-    public int getEnergia() 
-    {
-        return energAtual;
-    }
-
+    //Retorna a vida atual
     public int getVida() 
     {
         return vidaAtual;
     }
 
+    //Retorna a posicao atual
     public int getPosicaoAtual() 
     {
         return posicaoAtual;
     }
 
+    //Setters
+    //Atualiza a energia atual
     public void setEnergAtual(int energAtual) 
     {
-        this.energAtual = energAtual;
+        this.energAtual = energAtual; 
     }
 
+    //Atualiza a vida atual
     public void setVidaAtual(int vidaAtual) 
     {
         this.vidaAtual = vidaAtual;
     }
 
-    //Setters
+    //Atualiza a posicao atual
     public void setPosicaoAtual(int valor) 
     {
         posicaoAtual = valor;
     }
 
-    //Ataque
+    //Escolhe o ataque a ser usado no inimigo passado como parametro
     public void escolheAtaque(Inimigo inimigo)
     {
-        int energ_disp = getEnergDisponivel();
+        int energ_disp = getEnergDisponivel(); //Energia atual do robo
 
-        if (vidaAtual > 0)
+        if (vidaAtual > 0) //Se o robo estiver vivo
         {
+        	//Consoante as variaveis de perfil
             if (inimigo.getVida() > VIDA_INI_GRUA && energ_disp > ENERGGRUA + ENERG_ATAQUE_RES)
             {
-                ataqueGrua(inimigo);
+                ataqueGrua(inimigo); //Escolhe o ataque de grua
             } 
             else if (inimigo.getVida() > VIDA_INI_TOQUE && energ_disp > ENERGTOQUE + ENERG_ATAQUE_RES)
             {
-                ataqueToque(inimigo);
+                ataqueToque(inimigo); //Escolhe o ataque de toque
             } 
             else if (inimigo.getVida() > VIDA_INI_SOM && energ_disp > ENERGSOM + ENERG_ATAQUE_RES)
             {
-                ataqueSom(inimigo);
+                ataqueSom(inimigo); //Escolhe o ataque de som
             }
         }
     }
 
+    //Escolhe o ataque a ser usado no inimigo passado como parametro e imprime informacao na consola
     public void escolheAtaquePrint(Inimigo inimigo) 
     {
         int energ_disp = getEnergDisponivel();
@@ -133,54 +136,58 @@ public class Robo
             System.out.println("Nenhum");
         }
     }
-    
+
+    //Usa o ataque de som
     public void ataqueSom(Inimigo inimigo)
 	{
-		if(energAtual - ENERGSOM >= 0)
+		if(energAtual - ENERGSOM >= 0) //Se tem energia suficiente para usar este ataque
 		{
-			energAtual -= ENERGSOM;
-			inimigo.recebeDano(DANOSOM);
+			energAtual -= ENERGSOM; //Retira a energia gasta
+			inimigo.recebeDano(DANOSOM); //Inflige o dano no inimigo
 		}
 	}
 	
+    //Usa o ataque de toque
 	public void ataqueToque(Inimigo inimigo)
 	{
-		if(energAtual - ENERGTOQUE >= 0)
+		if(energAtual - ENERGTOQUE >= 0) //Se tem energia suficiente para usar este ataque
 		{
-			energAtual -= ENERGTOQUE;
-			inimigo.recebeDano(DANOTOQUE);
+			energAtual -= ENERGTOQUE; //Retira a energia gasta
+			inimigo.recebeDano(DANOTOQUE); //Inflige o dano no inimigo
 		}
 	}
 	
+	//Usa o ataque de grua
 	public void ataqueGrua(Inimigo inimigo)
 	{
-		if(energAtual - ENERGGRUA >= 0)
+		if(energAtual - ENERGGRUA >= 0) //Se tem energia suficiente para usar este ataque
 		{
-			energAtual -= ENERGGRUA;
-			inimigo.recebeDano(DANOGRUA);
+			energAtual -= ENERGGRUA; //Retira a energia gasta
+			inimigo.recebeDano(DANOGRUA); //Inflige o dano no inimigo
 		}
 	}
 
-    //Defesa
+    //Recebe o dano passado como parametro
     public void recebeDano(int valor) 
     {
-        if (vidaAtual - valor < 0) 
+        if (vidaAtual - valor < 0) //Se o robo ficar com vida negativa
         {
-            vidaAtual = 0;
+            vidaAtual = 0; //Coloca a vida a 0
         } 
         else 
         {
-            vidaAtual -= valor;
+            vidaAtual -= valor; //Retira a vida perdida
         }
     }
 
-    //Cura
+    //Tenta usar uma cura
     public void curar()
     {
-        if (vidaAtual > 0) 
+        if (vidaAtual > 0) //Se o robo estiver vivo
         {
-            int energ_disp = getEnergDisponivel();
+            int energ_disp = getEnergDisponivel(); //Energia atual
 
+            //Escolhe uma cura conforme o perfil atual
             if (energ_disp >= ENERGCURA3 + ENERG_CURA_RES && getVida() <= VIDA_CURA_3) 
             {
                 vidaAtual += CURA3;
@@ -199,6 +206,7 @@ public class Robo
         }
     }
 
+    //Tenta usar uma cura imprimindo informacao na consola
     public void curarPrint()
     {
         System.out.print("Vida:        " + vidaAtual + "->");
@@ -225,21 +233,23 @@ public class Robo
         System.out.println(vidaAtual);
     }
     
+    //Recupera 50% da energia atual
     public void recuperaEnergia()
     {
-        if (vidaAtual > 0)
+        if (vidaAtual > 0) //Se o robo estiver vivo
         {
-            if ((energAtual * 1.5) <= ENERGMAX)
+            if ((energAtual * 1.5) <= ENERGMAX) //Se nao exceder a energia maxima
             {
-                energAtual = (int) Math.round(energAtual * 1.5);
+                energAtual = (int) Math.round(energAtual * 1.5); //Recupera 50% da energia atual
             }
             else
             {
-                energAtual = ENERGMAX;
+                energAtual = ENERGMAX; //Coloca a energia igual a energia maxima
             }
         }
     }
-    
+
+    //Recupera 50% da energia atual imprimindo informacao na consola
     public void recuperaEnergiaPrint()
     {
         System.out.print("Recuperação: " + energAtual + "->");
@@ -257,6 +267,7 @@ public class Robo
         System.out.println(energAtual);
     }
     
+    //Altera a estrategia
     public static void estrategia(String perfil)
 	{
 		switch (perfil)
@@ -341,13 +352,18 @@ public class Robo
 		}
 	}
 	
+    //Escolhe a melhor estrategia a usar no proximo turno
     public void escolheEstrategia()
 	{
+    	//Variaveis locais para simulacao do proximo turno usando determinado perfil (copia dos valores originais)
     	int vidaAtual = this.vidaAtual;
 		int energAtual = this.energAtual;
 		TreeMap<Integer, Inimigo>  inimigos_aux = copiaTreemap(Simulacao.inimigos);
-		String perfil_escolhido = "base";
-		estrategia("base");
+		String perfil_escolhido = "base"; //Perfil escolhido
+		estrategia("base"); //Aplica o perfil "base"
+		
+		//Simula o metodo decide jogada usando as variaveis locais
+		//Curar
 		if(vidaAtual < Robo.VIDA_CURAR)
 		{
 			if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
@@ -366,13 +382,13 @@ public class Robo
 				energAtual -= ENERGCURA1;
 			}
 		}
-		else
+		else //Atacar
 		{
-			for(Inimigo inimigo : inimigos_aux.values())
+			for(Inimigo inimigo : inimigos_aux.values()) //Para cada inimigo
 			{
-				if(inimigo.getId() == 1)
+				if(inimigo.getId() == 1) //Tenta atacar primeiro as artilharias
 				{
-					if(Simulacao.turno != 12)
+					if(Simulacao.turno != 12) //Se nao for o ultimo turno entao aplica as reservas de energia
 					{
 						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
 						{
@@ -390,7 +406,7 @@ public class Robo
 							inimigo.recebeDano(DANOSOM);
 						}
 					}
-					else
+					else //Se for nao reserva energia
 					{
 						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
 						{
@@ -410,7 +426,7 @@ public class Robo
 					}
 				}
 			}
-			for(Inimigo inimigo : inimigos_aux.values())
+			for(Inimigo inimigo : inimigos_aux.values()) //Tenta atacar todos os outros inimigos
 			{
 				if(inimigo.getId() != 1 && inimigo.getId() != 3)
 				{
@@ -453,13 +469,13 @@ public class Robo
 				}
 			}
 		}
-		double score = calculaScore(inimigos_aux, vidaAtual, energAtual);
-		if(score <= 0)
+		double score = calculaScore(inimigos_aux, vidaAtual, energAtual); //Calcula um score usando as variaveis locais resultantes da simulacao
+		if(score <= 0) //Se o score for negativo (robo morre) entao volta a simular aplicando outro perfil
 		{
 			vidaAtual = this.vidaAtual;
 			energAtual = this.energAtual;
 			inimigos_aux = copiaTreemap(Simulacao.inimigos);
-			estrategia("agressivo");
+			estrategia("agressivo"); //Simula usando o perfil "agressivo"
 			if(vidaAtual < Robo.VIDA_CURAR)
 			{
 				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
@@ -565,18 +581,18 @@ public class Robo
 					}
 				}
 			}
-			double score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
-			if(score_aux > score)
+			double score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual); //Calcula o score usando o perfil agressivo
+			if(score_aux > score) //Se for melhor que o previamente calculado fica com este
 			{
 				score = score_aux;
-				perfil_escolhido = "agressivo";
+				perfil_escolhido = "agressivo"; //Indica que o perfil escolhido ate agora e o "agressivo"
 			}
 
 			
 			vidaAtual = this.vidaAtual;
 			energAtual = this.energAtual;
 			inimigos_aux = copiaTreemap(Simulacao.inimigos);
-			estrategia("equilibrado");
+			estrategia("equilibrado"); //Simula usando o perfil "equilibrado"
 			if(vidaAtual < Robo.VIDA_CURAR)
 			{
 				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
@@ -693,7 +709,7 @@ public class Robo
 			vidaAtual = this.vidaAtual;
 			energAtual = this.energAtual;
 			inimigos_aux = copiaTreemap(Simulacao.inimigos);
-			estrategia("passivo");
+			estrategia("passivo"); //Simula usando o perfil "passivo"
 			if(vidaAtual < Robo.VIDA_CURAR)
 			{
 				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
@@ -809,7 +825,7 @@ public class Robo
 			vidaAtual = this.vidaAtual;
 			energAtual = this.energAtual;
 			inimigos_aux = copiaTreemap(Simulacao.inimigos);
-			estrategia("sosom");
+			estrategia("sosom"); //Simula usando o perfil "sosom"
 			if(vidaAtual < Robo.VIDA_CURAR)
 			{
 				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
@@ -923,14 +939,15 @@ public class Robo
 			}
 		}
 		
-		if(score < 0 && energAtual >= 100)
-			estrategia("curamax");
-		else if(score < 0)
-			estrategia("ataquemax");
-		else
+		if(score < 0 && energAtual >= 100) //Se nenhum dos perfis impedir que o robo morra e tiver pelo menos 100 energia
+			estrategia("curamax"); //Aplica o perfil "curamax" com o objetivo de sobreviver recuperando vida
+		else if(score < 0) //Se nao tiver pelo menos 100 energia
+			estrategia("ataquemax"); //Aplica o perfil "ataquemax" tentando causar o maior dano possivel (recebendo menos dano na proxima defesa)
+		else //Aplica o melhor perfil
 			estrategia(perfil_escolhido);
 	}
     
+    //Escolhe a melhor estrategia a usar no proximo turno imprimindo informacao na consola
 	public void escolheEstrategiaPrint()
 	{
 		int vidaAtual = this.vidaAtual;
@@ -1533,8 +1550,10 @@ public class Robo
 		}
 	}
 	
+	//Calcula o score da proxima ronda usando determinado perfil e parametros passados
 	public double calculaScore(TreeMap<Integer, Inimigo> inimigos, int vidaAtual, int energAtual)
 	{
+		//Variaveis locais
 		double score = 0;
 		int vidaTotalInimigos = 0;
 		double danoTotalInimigos = 0;
@@ -1548,134 +1567,43 @@ public class Robo
 		double p_vidaTotalInimigos = 0.3;
 		double p_danoTotalInimigos = 0.5;
 		
+		score += p_vidaAtual * vidaAtual + p_energAtual * energAtual; //Adiciona ao score a vida e energia atuais multiplicadas pelos respetivos pesos
 		
-		
-		score += p_vidaAtual * vidaAtual + p_energAtual * energAtual;
-		
-		for (Inimigo inimigo : inimigos.values())
+		for (Inimigo inimigo : inimigos.values()) //Para cada inimigo
 		{
-			if (inimigo.getVida() <= 0)
+			if (inimigo.getVida() <= 0) //Se estiver morto
 			{
-				if (inimigo.getId() == 0) //se for um tanque
-					score += p_tan * 1000;
-				else if (inimigo.getId() == 1) //se for uma artilharia
-					score += p_art * 1000;
-				else if (inimigo.getId() == 2) //se for uma infantaria
-					score += p_inf * 1000;
+				if (inimigo.getId() == 0) //Se for um tanque
+					score += p_tan * 1000; //Adiciona ao score 1000 pontos multiplicados pelo peso do tanque
+				else if (inimigo.getId() == 1) //Se for uma artilharia
+					score += p_art * 1000; //Adiciona ao score 1000 pontos multiplicados pelo peso da artilharia
+				else if (inimigo.getId() == 2) //Se for uma infantaria
+					score += p_inf * 1000; //Adiciona ao score 1000 pontos multiplicados pelo peso da infantaria
 			}
-			else
+			else //Se estiver vivo
 			{
-				vidaTotalInimigos += inimigo.getVida();
-				danoTotalInimigos += inimigo.getDano();
+				vidaTotalInimigos += inimigo.getVida(); //Adiciona a vida do inimigo ao total
+				danoTotalInimigos += inimigo.getDano(); //Adiciona o dano do inimigo ao total
 			}
 		}
-		score -= p_vidaTotalInimigos * vidaTotalInimigos - p_danoTotalInimigos * danoTotalInimigos;
+		score -= p_vidaTotalInimigos * vidaTotalInimigos - p_danoTotalInimigos * danoTotalInimigos; //Retira ao score a vida e dano totais multiplicados pelos respetivos pesos
 		
-		//System.out.println(vidaAtual + " " + danoTotalInimigos);
-		if (vidaAtual - danoTotalInimigos <= 0)
-			score -= 10000;
-		return score;	
+		if (vidaAtual - danoTotalInimigos <= 0) //Se o robo morrer na proxima defesa
+			score -= 10000; //Subtrai 10000 pontos, deixando o score negativo para indicar que morre
+		return score;
 	}
 	
+	//Cria uma copia do treemap passado como parametro
 	public TreeMap<Integer, Inimigo> copiaTreemap(TreeMap<Integer, Inimigo> original)
 	{
 		TreeMap<Integer, Inimigo> copia = new TreeMap<>();
 		int i = 1;
 		for (Inimigo inimigo : original.values())
 		{
-			copia.put(i, new Inimigo(inimigo.getId(), true));
-			copia.get(i).setVida(inimigo.getVida());
+			copia.put(i, new Inimigo(inimigo.getId(), true)); //Coloca os inimigos do treemap original
+			copia.get(i).setVida(inimigo.getVida()); //Coloca a vida dos inimigos como as do treemap original
 			i++;
 		}
 		return copia;
-	}
-	
-	public TreeMap<Integer, Inimigo> simulaAtaque(TreeMap<Integer, Inimigo> inimigos_aux)
-	{
-		for(Inimigo inimigo : inimigos_aux.values())
-		{
-			if(inimigo.getId() == 1)
-			{
-				if(Simulacao.turno != 12)
-				{
-					if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-					{
-						energAtual -= ENERGGRUA;
-						inimigo.recebeDano(DANOGRUA);
-					}
-					else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-					{
-						energAtual -= ENERGTOQUE;
-						inimigo.recebeDano(DANOTOQUE);
-					}
-					else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-					{
-						energAtual -= ENERGSOM;
-						inimigo.recebeDano(DANOSOM);
-					}
-				}
-				else
-				{
-					if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-					{
-						energAtual -= ENERGGRUA;
-						inimigo.recebeDano(DANOGRUA);
-					}
-					else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-					{
-						energAtual -= ENERGTOQUE;
-						inimigo.recebeDano(DANOTOQUE);
-					}
-					else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-					{
-						energAtual -= ENERGSOM;
-						inimigo.recebeDano(DANOSOM);
-					}
-				}
-			}
-		}
-		for(Inimigo inimigo : inimigos_aux.values())
-		{
-			if(inimigo.getId() != 1 && inimigo.getId() != 3)
-			{
-				if(Simulacao.turno != 12)
-				{
-					if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-					{
-						energAtual -= ENERGGRUA;
-						inimigo.recebeDano(DANOGRUA);
-					}
-					else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-					{
-						energAtual -= ENERGTOQUE;
-						inimigo.recebeDano(DANOTOQUE);
-					}
-					else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-					{
-						energAtual -= ENERGSOM;
-						inimigo.recebeDano(DANOSOM);
-					}
-				}
-				else
-				{
-					if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-					{
-						energAtual -= ENERGGRUA;
-						inimigo.recebeDano(DANOGRUA);
-					}
-					else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-					{
-						energAtual -= ENERGTOQUE;
-						inimigo.recebeDano(DANOTOQUE);
-					}
-					else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-					{
-						energAtual -= ENERGSOM;
-						inimigo.recebeDano(DANOSOM);
-					}
-				}
-			}
-		}
-		return inimigos_aux;
 	}
 }

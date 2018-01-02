@@ -1,18 +1,21 @@
 package simulador;
 
+//Imports
 import java.io.IOException;
 import java.util.Random;
 import java.util.TreeMap;
 
 public class Simulacao
 {
-	static int turno = 0;
-	static int vitorias = 0;
-    static int derrotas = 0;
-    static TreeMap<Integer, Inimigo> inimigos = new TreeMap<Integer, Inimigo>();
+	//Definicao e inicializacao de variaveis
+	static int turno = 0; //Turno atual
+	static int vitorias = 0; //Numero de vitorias
+    static int derrotas = 0; //Numero de derrotas
+    static TreeMap<Integer, Inimigo> inimigos = new TreeMap<Integer, Inimigo>(); //Guarda os inimigos detetados
     private static Robo robo = new Robo();
     static int i = 1;
 
+    //Da reset as variaveis usadas em cada simulacao
     public static void resetVar()
     {
     	turno = 0;
@@ -21,6 +24,7 @@ public class Simulacao
         robo = new Robo();
     }
     
+    //Preenche o treemap dos inimigos com inimigos vazios (id = 3)
 	public static void preencheVazios()
 	{
         for (int i = 1; i <= 6; i++)
@@ -29,26 +33,32 @@ public class Simulacao
         }
     }
 	
-	 public static void preencheArray(int array[])
-	 {
+	//Preenche um array para simular um jogo aleatorio
+	public static void preencheArray(int array[])
+	{
         Random n = new Random();
 
-        for (int i = 0; i < 6; i++) 
+        for (int i = 0; i < 6; i++) //Preenche um array com inteiros de 1 a 6 (sao usados como ids dos inimigos)
         {
             array[i] = n.nextInt(6) + 1;
         }
     }
 
+	//Preenche arrays usados para simular um jogo
     public static void preencheDados()
     {
-        preencheArray(Simulador.tipoInimigo);
-        preencheArray(Simulador.turnoInimigo);
+        preencheArray(Simulador.tipoInimigo); //Array com ids dos inimigos
+        preencheArray(Simulador.turnoInimigo); //Array com os turnos em que sao colocados
     }
 	
+    //Comeca um novo jogo - simulacao de varios casos
     public static void novoJogo()
     {
+    	//Reset a vida e energia do robo
         robo.setVidaAtual(750);
         robo.setEnergAtual(500);
+        
+        //Inicializacao dos arrays
         preencheVazios();
         preencheDados();
 
@@ -56,18 +66,18 @@ public class Simulacao
 
         //Turno 1 - espera que coloque os inimigos no tabuleiro para os detetar
         //-----------
-        detetaInimigos(turno);
+        detetaInimigos(turno); //Deteta inimigos
 
-        //Turno 2 - atacar
-        robo.recuperaEnergia();
-        decideJogada();
+        //Turno 2 - atacar/curar
+        robo.recuperaEnergia(); //Recupera 50% da energia atual
+        decideJogada(); //Decide se ataca ou cura
 
         //Turno 3 - espera que coloque os inimigos no tabuleiro para os detetar
         turno++;
-        defender();
+        defender(); //Defende-se de cada um dos inimigos
         detetaInimigos(turno);
 
-        //Turno 4 - atacar
+        //Turno 4 - atacar/curar
         robo.recuperaEnergia();
         decideJogada();
 
@@ -76,7 +86,7 @@ public class Simulacao
         defender();
         detetaInimigos(turno);
 
-        //Turno 6 - atacar
+        //Turno 6 - atacar/curar
         robo.recuperaEnergia();
         decideJogada();
 
@@ -85,7 +95,7 @@ public class Simulacao
         defender();
         detetaInimigos(turno);
 
-        //Turno 8 - atacar
+        //Turno 8 - atacar/curar
         robo.recuperaEnergia();
         decideJogada();
 
@@ -94,7 +104,7 @@ public class Simulacao
         defender();
         detetaInimigos(turno);
 
-        //Turno 10 - atacar
+        //Turno 10 - atacar/curar
         robo.recuperaEnergia();
         decideJogada();
 
@@ -103,11 +113,11 @@ public class Simulacao
         defender();
         detetaInimigos(turno);
 
-        //Turno 12 - atacar
+        //Turno 12 - atacar/curar
         robo.recuperaEnergia();
         decideJogada();
 
-        //Turno 13
+        //Turno 13 - defende-se pela ultima vez
         defender();
 
         if (robo.getVida() > 0) 
@@ -119,25 +129,24 @@ public class Simulacao
             derrotas++;
         }
 
-        inimigos.clear();
-
-        //System.out.println(robo.getVida() + " | " + robo.getEnergDisponivel());
+        inimigos.clear(); //Reset ao treemap dos inimigos
     }
     
+    //Comeca um novo jogo - simulacao de todos os casos
     public static void novoJogo(String str1, String str) throws IOException
 	{
 		//Turno 1
     	turno = 1;
     	
 		//Turno 2
-    	turno++;
-		robo.recuperaEnergia();
-		registaInimigos(str1.toCharArray()[0], str);
-		decideJogada();
+    	turno++; //Incrementa o turno
+		robo.recuperaEnergia(); //Recupera 50% da energia atual
+		registaInimigos(str1.toCharArray()[0], str); //Coloca no treemap os inimigos passados como parametro (do metodo geracombinacoes)
+		decideJogada(); //Decide se ataca ou cura
 		
 		//Turno 3
 		turno++;
-		defender();
+		defender(); //Defende-se dos inimigos vivos
 		
 		//Turno 4
 		turno++;
@@ -190,7 +199,8 @@ public class Simulacao
 		defender();
 		fimJogo();
 	}
-    
+
+    //Comeca um novo jogo - simulacao de um jogo aleatorio ou especifico
     public static void novoJogoPrint()
     {
         System.out.println("Tipo|Turno");
@@ -302,26 +312,28 @@ public class Simulacao
         System.out.println("Energia: " + robo.getEnergDisponivel());
     }
     
+    //Tenta atacar cada inimigo
     public static void atacar()
     {
-        for (Inimigo inimigo : inimigos.values())
+        for (Inimigo inimigo : inimigos.values()) //Primeiro tenta atacar as artilharias
         {
-        	if(inimigo.getId() == 1)
-        		robo.escolheAtaque(inimigo);
+        	if(inimigo.getId() == 1) //Se for uma artilharia (id = 1)
+        		robo.escolheAtaque(inimigo); //Escolhe um ataque
         }
-        for (Inimigo inimigo : inimigos.values())
+        for (Inimigo inimigo : inimigos.values()) //Tenta atacar todos os outros inimigos
         {
-        	if(inimigo.getId() != 1 && inimigo.getId() != 3)
+        	if(inimigo.getId() != 1 && inimigo.getId() != 3) //Se nao for uma artilharia e nao for vazio
         		robo.escolheAtaque(inimigo);
         }
     }
     
+    //Tenta atacar cada inimigo imprimindo informacao na consola
     public static void atacarPrint()
     {
     	for (Inimigo inimigo : inimigos.values())
         {
         	if(inimigo.getId() == 1)
-        		robo.escolheAtaquePrint(inimigo);
+        		robo.escolheAtaquePrint(inimigo); //Escolhe um ataque e imprime informacao sobre o mesmo
         }
         for (Inimigo inimigo : inimigos.values())
         {
@@ -329,24 +341,27 @@ public class Simulacao
         		robo.escolheAtaquePrint(inimigo);
         }
     }
-    
+
+    //Defende-se de cada inimigo
     public static void defender()
 	{
-		for(Inimigo inimigo : inimigos.values())
+		for(Inimigo inimigo : inimigos.values()) //Para cada inimigo
 		{
-			robo.recebeDano((int)inimigo.getDano());
+			robo.recebeDano((int)inimigo.getDano()); //Recebe o dano que o inimigo inflige
 		}
 	}
-    
+
+    //Defende-se de cada inimigo imprimindo informacao na consola
     public static void defenderPrint()
     {
-        for (Inimigo inimigo : inimigos.values()) 
+        for (Inimigo inimigo : inimigos.values()) //Para cada inimigo
         {
-            robo.recebeDano((int) inimigo.getDano());
-            System.out.println("Dano receb.: " + (int) inimigo.getDano());
+            robo.recebeDano((int) inimigo.getDano()); //Recebe o dano que o inimigo inflige
+            System.out.println("Dano receb.: " + (int) inimigo.getDano()); //Imprime quanto dano recebeu
         }
     }
-    
+
+    //Coloca inimigos usando os ids do array de inimigos gerado, nos turnos indicados (no outro array gerado)
     public static void detetaInimigos(int turno)
     {
         for (int i = 0; i < 6; i++)
@@ -363,8 +378,10 @@ public class Simulacao
         }
     }
     
+    //Decide que perfil deve usar e se ataca ou cura
     public static void decideJogada()
     {
+    	
     	if(turno == 12)
     		Robo.estrategia("ataquemax");
     	else if(inimigos.get(6).getId() != 3 && robo.getVida() >= 150)
@@ -381,6 +398,7 @@ public class Simulacao
         }
     }
     
+    //Decide que perfil deve usar e se ataca ou cura, imprimindo informacao na consola
     public static void decideJogadaPrint()
     {
     	if(turno == 12)
@@ -409,35 +427,38 @@ public class Simulacao
         System.out.println("Ener: " + robo.getEnergDisponivel());
     }
     
-    public void voltarInicio() //Voltar ao inicio do tabuleiro a partir de qualquer ponto
+    //Voltar ao inicio do tabuleiro a partir de qualquer ponto
+    public void voltarInicio()
 	{	
-		robo.setPosicaoAtual(1);
+		robo.setPosicaoAtual(1); //Coloca a posicao do robo a 1
 	}
 	
+    //Regista inimigos usando os parametros passados (quantos deverao ser colocados em determinado turno e quais)
 	public static void registaInimigos(char turno, String string)
 	{
-		int aux = Integer.parseInt(turno + "");
+		int aux = Integer.parseInt(turno + ""); //Quantos inimigos sao colocados neste turno
 		if(inimigos.size() <= 6)
 		{
-			for(int l = 1 ; l <= aux ; l++)
+			for(int l = 1 ; l <= aux ; l++) //Enquanto falta colocar inimigos
 			{
-				inimigos.put(i, new Inimigo(Integer.parseInt(string.toCharArray()[i-1] + ""), true));
+				inimigos.put(i, new Inimigo(Integer.parseInt(string.toCharArray()[i-1] + ""), true)); //Coloca um inimigo com o id respetivo passado por "string"
 				i++;
 			}
 		}
 	}
 	
+	//Chamado no fim do jogo ou se o robo morreu
 	public static void fimJogo() throws IOException
 	{
-		if(robo.getVida() == 0)
+		if(robo.getVida() == 0) //Se o robo morreu
 		{
-			derrotas++;
-			Simulador.bw.write(Simulador.posicao + 1 + "\t-\tDerrota\tn." + String.format("%06d", derrotas) + "\t-\t" + Simulador.arr2.get(Simulador.posicao) + "\t-\t");
+			derrotas++; //Incrementa o numero de derrotas
+			Simulador.bw.write(Simulador.posicao + 1 + "\t-\tDerrota\tn." + String.format("%06d", derrotas) + "\t-\t" + Simulador.arr2.get(Simulador.posicao) + "\t-\t"); //Imprime no ficheiro da simulacao os dados do jogo
 		}
-		else
+		else //Se o jogo chegou ao fim (ultimo turno) e o robo nao morreu
 		{
-			vitorias++;
-			Simulador.bw.write(Simulador.posicao + 1 + "\t-\tVitoria\tn." + String.format("%06d", vitorias) + "\t-\t" + Simulador.arr2.get(Simulador.posicao) + "\t-\t");
+			vitorias++; //Incrementa o numero de vitorias
+			Simulador.bw.write(Simulador.posicao + 1 + "\t-\tVitoria\tn." + String.format("%06d", vitorias) + "\t-\t" + Simulador.arr2.get(Simulador.posicao) + "\t-\t"); //Imprime no ficheiro da simulacao os dados do jogo
 		}
 		i = 1;
 	}
