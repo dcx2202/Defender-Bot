@@ -285,63 +285,78 @@ public class Projeto {
 	public static void atacar()
 	{
 		int posUltimoVivo = 0;
-		robo.setPosicaoAtual(1);
 		
-		robo.tocaSom("som4"); //"Preparando-me para atacar"
-		
-		for(Inimigo inimigo : inimigos.values())		//para cada inimigo
+		for(Inimigo inimigo : inimigos.values())
 		{
-			if(inimigo.getVida() > 0 && inimigo.getId() == 1) //se for uma artilharia e estiver viva
-				if(inimigo.posicao > posUltimoVivo) //fica com a posicao da ultima viva
-					posUltimoVivo = inimigo.posicao;
-		}
-		
-		for(Inimigo inimigo : inimigos.values())		//para cada inimigo
-		{
-			if(inimigo.getId() == 1) //Tenta atacar primeiro as artilharias
-			{
-				dadosRobo();
-				robo.moverPos(1, inimigo.posicao); //Move-se ate a primeira
-				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual())); //Escolhe o ataque
-				if(robo.getPosicaoAtual() >= posUltimoVivo) //Quando estiver na posicao da ultima
-					voltarInicio(); //Volta ao inicio do tabuleiro
-			}
-		}
-		
-		posUltimoVivo = 0;
-		for(Inimigo inimigo : inimigos.values())		//para cada inimigo
-		{
-			if(inimigo.getVida() > 0 && inimigo.getId() != 1) //fica com a posicao do ultimo inimigo vivo que nao seja uma artilharia
+			if(inimigo.getVida() > 0)
 				if(inimigo.posicao > posUltimoVivo)
 					posUltimoVivo = inimigo.posicao;
 		}
 		
 		robo.setPosicaoAtual(1);
+		robo.tocaSom("som4"); //"Preparando-me para atacar"
 		
-		while(robo.getPosicaoAtual() <= posUltimoVivo)		//enquanto o robo nao chegar ao ultimo inimigo vivo
+		boolean artVivas = false;
+		
+		for(Inimigo inimigo : inimigos.values())
+		{
+			if(inimigo.getId() == 1 && inimigo.getVida() > 0)
+			{
+				artVivas = true;
+				break;
+			}
+		}
+		
+		if(artVivas)
+		{
+			while(robo.getPosicaoAtual() <= posUltimoVivo)
+			{
+				dadosRobo();
+				if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0 && inimigos.get(robo.getPosicaoAtual()).getId() == 1)
+					robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
+				espera(500);
+				if(robo.getPosicaoAtual() < posUltimoVivo)
+				{
+					int posPrimeiroVivo = -1;
+					for(Inimigo inimigo : inimigos.values())
+					{
+						if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual())
+						{
+							posPrimeiroVivo = inimigo.posicao;
+							break;
+						}
+					}
+					robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual());
+				}
+				else
+					break;
+			}
+			voltarInicio();
+		}
+		while(robo.getPosicaoAtual() <= posUltimoVivo)
 		{
 			dadosRobo();
-			if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0 && inimigos.get(robo.getPosicaoAtual()).getId() != 1) //Se o inimigo estiver vivo e nao for uma artilharia
-				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual())); //Escolhe um ataque
-			espera(500); //Espera 500 milisegundos
-			if(robo.getPosicaoAtual() < posUltimoVivo) //Enquanto nao estiver na posicao do ultimo vivo
+			if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0 && inimigos.get(robo.getPosicaoAtual()).getId() != 1)
+				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
+			espera(500);
+			if(robo.getPosicaoAtual() < posUltimoVivo)
 			{
 				int posPrimeiroVivo = -1;
-				for(Inimigo inimigo : inimigos.values())	//para cada inimigo
+				for(Inimigo inimigo : inimigos.values())
 				{
-					if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual()) //Procura o primeiro inimigo vivo que ainda nao tenha sido atacado
+					if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual())
 					{
 						posPrimeiroVivo = inimigo.posicao;
 						break;
 					}
 				}
-				robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual()); //Move-se ate ao primeiro inimigo vivo por atacar
+				robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual());
 			}
 			else
 				break;
 		}
 		espera(500);
-		voltarInicio(); //Volta ao inicio
+		voltarInicio();
 	}
 	
 	public static void defender()		
