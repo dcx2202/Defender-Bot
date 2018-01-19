@@ -10,9 +10,13 @@ import lejos.utility.Delay;
 public class Projeto {
 
 	//Criacao/Iniciacao de variaveis/objetos
-	static Robo robo = new Robo();
 	static TreeMap<Integer, Inimigo> inimigos = new TreeMap<>();
+	static Robo robo = new Robo();
 	static int turno = 0;
+	static int j = 0;
+	static boolean jogoSimulado = false;
+	static boolean jogoGanho = false;
+	static String[] estrategia = new String[6];
 	
 	
 	//Main
@@ -269,28 +273,49 @@ public class Projeto {
 			if(tudoCheioEMorto)		//se todos os inimigos estao mortos
 				fimJogo();			//acaba o jogo
 		}
-		if(turno == 12)				//se o turno for o ultimo turno do robo (ultima possibilidade de ataque ou cura)
-    		Robo.estrategia("ataquemax");	//o robo utiliza toda a sua energia no ataque
-    	else if(inimigos.get(6).getId() != 3 && robo.getVida() >= 150)		//se ja tiverem sido detetados todos os inimigos e o robo tiver pelo menos 150 de vida
-    		Robo.estrategia("sosom");	//o robo utiliza apenas ataques de som
-    	else
-    		robo.escolheEstrategia();	//o robo decide a melhor estrategia
-		if(robo.getVida() < Robo.VIDA_CURAR)	//se a vida do robo for menor que o parametro VIDA_CURAR 
-			robo.curar();		//o robo cura-se
-		else
-			atacar();			//o robo ataca
 		
+		if(!jogoSimulado || !jogoGanho) //Se ainda nao tiver simulado este jogo ou se ainda nao tiver encontrado uma estrategia vencedora
+    	{
+	    	if(turno == 12) //Se for o ultimo turno do robo ataca o maximo que puder
+	    		Robo.estrategia("ataquemax");
+	    	else if(inimigos.get(6).getId() != 3 && !jogoSimulado) //Se forem detetados todos os inimigos e o jogo ainda nao tiver sido simulado
+	    	{
+	    		estrategia = robo.escolheEstrategiaJogo(); //Simula o resto do jogo atual
+	    		if(jogoGanho) //Se houver uma estrategia vencedora
+	    		{
+	    			Robo.estrategia(estrategia[j]); //Aplica o perfil da estrategia vencedora para este turno
+		    		j++;
+	    		}
+	    		else
+	    			robo.escolheEstrategia(); //Escolhe uma estrategia atraves da simulacao do proximo turno
+	    	}
+	    	else
+	    		robo.escolheEstrategia(); //Escolhe uma estrategia atraves da simulacao do proximo turno
+    	}
+    	else //Se este jogo ja tiver sido simulado e encontrada uma estrategia vencedora
+    	{
+    		Robo.estrategia(estrategia[j]); //Aplica o perfil da estrategia vencedora para este turno
+    		j++;
+    	}
+        if (robo.getVida() < Robo.VIDA_CURAR) //Curar
+        {
+            robo.curar();
+        } 
+        else //Atacar
+        {
+            atacar();
+        }
 	}
 	
 	public static void atacar()
 	{
 		int posUltimoVivo = 0;
 		
-		for(Inimigo inimigo : inimigos.values())
+		for(Inimigo inimigo : inimigos.values()) //Para cada inimigo 
 		{
-			if(inimigo.getVida() > 0)
+			if(inimigo.getVida() > 0 && inimigo.getId() == 1) //Se estiver vivo e for uma artilharia
 				if(inimigo.posicao > posUltimoVivo)
-					posUltimoVivo = inimigo.posicao;
+					posUltimoVivo = inimigo.posicao; //fica com a posicao da ultima artilharia viva
 		}
 		
 		robo.setPosicaoAtual(1);
@@ -300,7 +325,7 @@ public class Projeto {
 		
 		for(Inimigo inimigo : inimigos.values())
 		{
-			if(inimigo.getId() == 1 && inimigo.getVida() > 0)
+			if(inimigo.getId() == 1 && inimigo.getVida() > 0) //Se tiver alguma artilharia viva entao entra no ciclo de ataque as artilharias
 			{
 				artVivas = true;
 				break;
@@ -309,54 +334,63 @@ public class Projeto {
 		
 		if(artVivas)
 		{
-			while(robo.getPosicaoAtual() <= posUltimoVivo)
+			while(robo.getPosicaoAtual() <= posUltimoVivo) //Enquanto nao tiver na posicao da ultima artilharia viva
 			{
-				dadosRobo();
-				if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0 && inimigos.get(robo.getPosicaoAtual()).getId() == 1)
-					robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
+				dadosRobo(); //Mostra os dados do robo
+				if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0 && inimigos.get(robo.getPosicaoAtual()).getId() == 1 && inimigos.get(robo.getPosicaoAtual()).getId() != 3) //Se for uma artilharia e estiver viva
+					robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual())); //Escolhe ataque
 				espera(500);
-				if(robo.getPosicaoAtual() < posUltimoVivo)
+				if(robo.getPosicaoAtual() < posUltimoVivo) //Procura a primeira artilharia viva para se deslocar ate ela
 				{
 					int posPrimeiroVivo = -1;
 					for(Inimigo inimigo : inimigos.values())
 					{
-						if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual())
+						if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual() && inimigo.getId() == 1)
 						{
 							posPrimeiroVivo = inimigo.posicao;
 							break;
 						}
 					}
-					robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual());
+					robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual()); //Desloca-se ate ela
 				}
 				else
 					break;
 			}
-			voltarInicio();
+			voltarInicio(); //Volta ao inicio
+			robo.setPosicaoAtual(1);
 		}
-		while(robo.getPosicaoAtual() <= posUltimoVivo)
+		
+		//Ciclo de ataque aos outros tipos de inimigos
+		for(Inimigo inimigo : inimigos.values())
 		{
-			dadosRobo();
-			if(inimigos.get(robo.getPosicaoAtual()).getVida() > 0 && inimigos.get(robo.getPosicaoAtual()).getId() != 1)
-				robo.escolheAtaque(inimigos.get(robo.getPosicaoAtual()));
-			espera(500);
-			if(robo.getPosicaoAtual() < posUltimoVivo)
-			{
-				int posPrimeiroVivo = -1;
-				for(Inimigo inimigo : inimigos.values())
-				{
-					if(inimigo.getVida() > 0 && inimigo.posicao > robo.getPosicaoAtual())
-					{
-						posPrimeiroVivo = inimigo.posicao;
-						break;
-					}
-				}
-				robo.moverPos(1, posPrimeiroVivo - robo.getPosicaoAtual());
-			}
-			else
-				break;
+			if(inimigo.getVida() > 0)
+				if(inimigo.posicao > posUltimoVivo)
+					posUltimoVivo = inimigo.posicao;
 		}
-		espera(500);
-		voltarInicio();
+		
+		boolean algumVivo = false;
+		for(Inimigo inimigo : inimigos.values())
+		{
+			if(inimigo.getVida() > 0 && inimigo.getId() != 1 && inimigo.getId() != 3) //Se houver algum inimigo vivo (nao artilharia)
+			{
+				algumVivo = true;
+				break;
+			}
+		}
+		if(algumVivo)
+		{
+			for(Inimigo inimigo : inimigos.values()) //Para cada inimigo
+			{
+				dadosRobo(); //Mostra os dados do robo
+				if(inimigo.getVida() > 0 && inimigo.getId() != 1 && inimigo.getId() != 3) //Se for um inimigo nao artilharia e estiver vivo
+					robo.escolheAtaque(inimigo); //Escolhe ataque
+				espera(500);
+				if(robo.getPosicaoAtual() < 6) //Enquanto nao chegar ao fim do tabuleiro
+					robo.moverPos(1, 1); //Move-se um slot
+			}
+		}
+		espera(500); //Acabou de atacar
+		voltarInicio(); //Volta ao primeiro slot
 	}
 	
 	public static void defender()		
