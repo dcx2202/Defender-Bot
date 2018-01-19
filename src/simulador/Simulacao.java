@@ -14,11 +14,18 @@ public class Simulacao
     static TreeMap<Integer, Inimigo> inimigos = new TreeMap<Integer, Inimigo>(); //Guarda os inimigos detetados
     private static Robo robo = new Robo();
     static int i = 1;
+    static int j = 0;
+    static boolean jogoSimulado = false;
+    static boolean jogoGanho = false;
+    static String[] estrategia = new String[6];
 
     //Da reset as variaveis usadas em cada simulacao
     public static void resetVar()
     {
     	turno = 0;
+    	j = 0;
+    	jogoSimulado = false;
+        jogoGanho = false;
         inimigos = new TreeMap<Integer, Inimigo>();
         preencheVazios();
         robo = new Robo();
@@ -63,6 +70,9 @@ public class Simulacao
         preencheDados();
 
         turno = 1;
+        j = 0;
+        jogoSimulado = false;
+        jogoGanho = false;
 
         //Turno 1 - espera que coloque os inimigos no tabuleiro para os detetar
         //-----------
@@ -137,6 +147,9 @@ public class Simulacao
 	{
 		//Turno 1
     	turno = 1;
+    	j = 0;
+    	jogoSimulado = false;
+        jogoGanho = false;
     	
 		//Turno 2
     	turno++; //Incrementa o turno
@@ -210,6 +223,10 @@ public class Simulacao
         }
 
         turno = 1;
+        j = 0;
+        jogoSimulado = false;
+        jogoGanho = false;
+        
         System.out.println("\n---------------" + turno + "---------------\n");
 
         //Turno 1 - espera que coloque os inimigos no tabuleiro para os detetar
@@ -381,18 +398,34 @@ public class Simulacao
     //Decide que perfil deve usar e se ataca ou cura
     public static void decideJogada()
     {
-    	
-    	if(turno == 12)
-    		Robo.estrategia("ataquemax");
-    	else if(inimigos.get(6).getId() != 3 && robo.getVida() >= 150)
-    		Robo.estrategia("sosom");
-    	else
-    		robo.escolheEstrategia();
-        if (robo.getVida() < Robo.VIDA_CURAR)
+    	if(!jogoSimulado || !jogoGanho) //Se ainda nao tiver simulado este jogo ou se ainda nao tiver encontrado uma estrategia vencedora
+    	{
+	    	if(turno == 12) //Se for o ultimo turno do robo ataca o maximo que puder
+	    		Robo.estrategia("ataquemax");
+	    	else if(inimigos.get(6).getId() != 3 && !jogoSimulado) //Se forem detetados todos os inimigos e o jogo ainda nao tiver sido simulado
+	    	{
+	    		estrategia = robo.escolheEstrategiaJogo(); //Simula o resto do jogo atual
+	    		if(jogoGanho) //Se houver uma estrategia vencedora
+	    		{
+	    			Robo.estrategia(estrategia[j]); //Aplica o perfil da estrategia vencedora para este turno
+		    		j++;
+	    		}
+	    		else
+	    			robo.escolheEstrategia(); //Escolhe uma estrategia atraves da simulacao do proximo turno
+	    	}
+	    	else
+	    		robo.escolheEstrategia(); //Escolhe uma estrategia atraves da simulacao do proximo turno
+    	}
+    	else //Se este jogo ja tiver sido simulado e encontrada uma estrategia vencedora
+    	{
+    		Robo.estrategia(estrategia[j]); //Aplica o perfil da estrategia vencedora para este turno
+    		j++;
+    	}
+        if (robo.getVida() < Robo.VIDA_CURAR) //Curar
         {
             robo.curar();
         } 
-        else
+        else //Atacar
         {
             atacar();
         }
@@ -401,18 +434,43 @@ public class Simulacao
     //Decide que perfil deve usar e se ataca ou cura, imprimindo informacao na consola
     public static void decideJogadaPrint()
     {
-    	if(turno == 12)
+    	if(!jogoSimulado || !jogoGanho)
     	{
-    		Robo.estrategia("ataquemax");
-    		System.out.println("Perfil ataquemax escolhido!\n");
-    	}
-    	else if(inimigos.get(6).getId() != 3 && robo.getVida() >= 150)
-    	{
-    		Robo.estrategia("sosom");
-    		System.out.println("Perfil sosom escolhido!\n");
+	    	if(turno == 12)
+	    	{
+	    		Robo.estrategia("ataquemax");
+	    		System.out.println("Perfil ataquemax escolhido!\n");
+	    	}
+	    	else if(inimigos.get(6).getId() != 3 && !jogoSimulado)
+	    	{
+	    		estrategia = robo.escolheEstrategiaJogo();
+	    		System.out.println("Todos os inimigos detetados, calculando a melhor estrategia...");
+	    		if(jogoGanho)
+	    		{
+	    			System.out.println("Detetada estrategia vencedora! A usa-la ate ao final do jogo...");
+	    			String out = "[";
+	    			for(String string : estrategia)
+	    				out += string + ", ";
+	    			System.out.println(out.substring(0, out.length() - 2) + "]");
+	    			System.out.println("Perfil escolhido: " + estrategia[j] + "\n");
+	    			Robo.estrategia(estrategia[j]);
+		    		j++;
+	    		}
+	    		else
+	    		{
+	    			System.out.println("Impossivel ganhar! Fazendo o melhor que posso...");
+	    			robo.escolheEstrategiaPrint();
+	    		}
+	    	}
+	    	else
+	    		robo.escolheEstrategiaPrint();
     	}
     	else
-    		robo.escolheEstrategiaPrint();
+    	{
+    		Robo.estrategia(estrategia[j]);
+    		System.out.println("Perfil escolhido: " + estrategia[j] + "\n");
+    		j++;
+    	}
         if (robo.getVida() < Robo.VIDA_CURAR)
         {
             System.out.println("Curar");

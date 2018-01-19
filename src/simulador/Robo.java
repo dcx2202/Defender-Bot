@@ -1,5 +1,6 @@
 package simulador;
 
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class Robo 
@@ -34,6 +35,11 @@ public class Robo
     static int VIDA_INI_TOQUE = 100;	//vida do inimigo > VIDA_INI_TOQUE para usar o ataque de toque
     static int VIDA_INI_SOM = 0;		//vida do inimigo > VIDA_INI_SOM para usar o ataque de som
 
+    //Variaveis para as simulacoes
+    int a_vidaAtual = vidaAtual;
+	int a_energAtual = energAtual;
+	TreeMap<Integer, Inimigo> a_inimigos = copiaTreemap(Simulacao.inimigos);
+    
     //Construtor
     public Robo() 
     {
@@ -349,6 +355,17 @@ public class Robo
 				VIDA_INI_TOQUE = 100;
 				VIDA_INI_SOM = 0;
 				break;
+			case "nada": //Impede de jogar
+				ENERG_CURA_RES = 1000; //Impede de curar
+				ENERG_ATAQUE_RES = 1000; //Impede de atacar
+				VIDA_CURA_3 = 0;
+				VIDA_CURA_2 = 0;
+				VIDA_CURA_1 = 0;
+				VIDA_CURAR = 0;
+				VIDA_INI_GRUA = 0;
+				VIDA_INI_TOQUE = 0;
+				VIDA_INI_SOM = 0;
+				break;
 		}
 	}
 	
@@ -356,582 +373,55 @@ public class Robo
     public void escolheEstrategia()
 	{
     	//Variaveis locais para simulacao do proximo turno usando determinado perfil (copia dos valores originais)
-    	int vidaAtual = this.vidaAtual;
-		int energAtual = this.energAtual;
-		TreeMap<Integer, Inimigo>  inimigos_aux = copiaTreemap(Simulacao.inimigos);
+    	a_vidaAtual = this.vidaAtual;
+		a_energAtual = this.energAtual;
+		a_inimigos = copiaTreemap(Simulacao.inimigos);
 		String perfil_escolhido = "base"; //Perfil escolhido
 		estrategia("base"); //Aplica o perfil "base"
 		
 		//Simula o metodo decide jogada usando as variaveis locais
 		//Curar
-		if(vidaAtual < Robo.VIDA_CURAR)
-		{
-			if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-			{
-				vidaAtual += CURA3;
-				energAtual -= ENERGCURA3;
-			}
-			else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-			{
-				vidaAtual += CURA2;
-				energAtual -= ENERGCURA2;
-			}
-			else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-			{
-				vidaAtual += CURA1;
-				energAtual -= ENERGCURA1;
-			}
-		}
-		else //Atacar
-		{
-			for(Inimigo inimigo : inimigos_aux.values()) //Para cada inimigo
-			{
-				if(inimigo.getId() == 1) //Tenta atacar primeiro as artilharias
-				{
-					if(Simulacao.turno != 12) //Se nao for o ultimo turno entao aplica as reservas de energia
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-					else //Se for nao reserva energia
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-				}
-			}
-			for(Inimigo inimigo : inimigos_aux.values()) //Tenta atacar todos os outros inimigos
-			{
-				if(inimigo.getId() != 1 && inimigo.getId() != 3)
-				{
-					if(Simulacao.turno != 12)
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-					else
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-				}
-			}
-		}
-		double score = calculaScore(inimigos_aux, vidaAtual, energAtual); //Calcula um score usando as variaveis locais resultantes da simulacao
+		double score = simulaTurno();
 		if(score <= 0) //Se o score for negativo (robo morre) entao volta a simular aplicando outro perfil
 		{
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("agressivo"); //Simula usando o perfil "agressivo"
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			double score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual); //Calcula o score usando o perfil agressivo
+			double score_aux = simulaTurno();
 			if(score_aux > score) //Se for melhor que o previamente calculado fica com este
 			{
 				score = score_aux;
 				perfil_escolhido = "agressivo"; //Indica que o perfil escolhido ate agora e o "agressivo"
 			}
-
 			
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("equilibrado"); //Simula usando o perfil "equilibrado"
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
+			score_aux = simulaTurno();
 			if(score_aux > score)
 			{
 				score = score_aux;
 				perfil_escolhido = "equilibrado";
 			}
-			
-			
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+						
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("passivo"); //Simula usando o perfil "passivo"
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
+			score_aux = simulaTurno();
 			if(score_aux > score)
 			{
 				score = score_aux;
 				perfil_escolhido = "passivo";
 			}
 			
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("sosom"); //Simula usando o perfil "sosom"
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
+			score_aux = simulaTurno();
 			if(score_aux > score)
 			{
 				score = score_aux;
@@ -950,230 +440,20 @@ public class Robo
     //Escolhe a melhor estrategia a usar no proximo turno imprimindo informacao na consola
 	public void escolheEstrategiaPrint()
 	{
-		int vidaAtual = this.vidaAtual;
-		int energAtual = this.energAtual;
-		TreeMap<Integer, Inimigo>  inimigos_aux = copiaTreemap(Simulacao.inimigos);
+		a_vidaAtual = this.vidaAtual;
+		a_energAtual = this.energAtual;
+		a_inimigos = copiaTreemap(Simulacao.inimigos);
 		String perfil_escolhido = "base";
 		estrategia("base");
-		if(vidaAtual < Robo.VIDA_CURAR)
-		{
-			if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-			{
-				vidaAtual += CURA3;
-				energAtual -= ENERGCURA3;
-			}
-			else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-			{
-				vidaAtual += CURA2;
-				energAtual -= ENERGCURA2;
-			}
-			else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-			{
-				vidaAtual += CURA1;
-				energAtual -= ENERGCURA1;
-			}
-		}
-		else
-		{
-			for(Inimigo inimigo : inimigos_aux.values())
-			{
-				if(inimigo.getId() == 1)
-				{
-					if(Simulacao.turno != 12)
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-					else
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-				}
-			}
-			for(Inimigo inimigo : inimigos_aux.values())
-			{
-				if(inimigo.getId() != 1 && inimigo.getId() != 3)
-				{
-					if(Simulacao.turno != 12)
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-					else
-					{
-						if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-						{
-							energAtual -= ENERGGRUA;
-							inimigo.recebeDano(DANOGRUA);
-						}
-						else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-						{
-							energAtual -= ENERGTOQUE;
-							inimigo.recebeDano(DANOTOQUE);
-						}
-						else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-						{
-							energAtual -= ENERGSOM;
-							inimigo.recebeDano(DANOSOM);
-						}
-					}
-				}
-			}
-		}
-		double score = calculaScore(inimigos_aux, vidaAtual, energAtual);
+		double score = simulaTurno();
 		System.out.println("Perfil base: Score = " + score);
 		if(score <= 0)
 		{
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("agressivo");
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			double score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
+			double score_aux = simulaTurno();
 			if(score_aux > score)
 			{
 				score = score_aux;
@@ -1181,116 +461,11 @@ public class Robo
 			}
 			System.out.println("Perfil agressivo: Score = " + score_aux);
 			
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("equilibrado");
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
+			score_aux = simulaTurno();
 			if(score_aux > score)
 			{
 				score = score_aux;
@@ -1298,116 +473,11 @@ public class Robo
 			}
 			System.out.println("Perfil equilibrado: Score = " + score_aux);
 			
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("passivo");
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
+			score_aux = simulaTurno();
 			if(score_aux > score)
 			{
 				score = score_aux;
@@ -1415,116 +485,11 @@ public class Robo
 			}
 			System.out.println("Perfil passivo: Score = " + score_aux);
 			
-			vidaAtual = this.vidaAtual;
-			energAtual = this.energAtual;
-			inimigos_aux = copiaTreemap(Simulacao.inimigos);
+			a_vidaAtual = this.vidaAtual;
+			a_energAtual = this.energAtual;
+			a_inimigos = copiaTreemap(Simulacao.inimigos);
 			estrategia("sosom");
-			if(vidaAtual < Robo.VIDA_CURAR)
-			{
-				if(energAtual >= ENERGCURA3 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_3)
-				{
-					vidaAtual += CURA3;
-					energAtual -= ENERGCURA3;
-				}
-				else if(energAtual >= ENERGCURA2 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_2)
-				{
-					vidaAtual += CURA2;
-					energAtual -= ENERGCURA2;
-				}
-				else if(energAtual >= ENERGCURA1 + ENERG_CURA_RES && vidaAtual <= VIDA_CURA_1)
-				{
-					vidaAtual += CURA1;
-					energAtual -= ENERGCURA1;
-				}
-			}
-			else
-			{
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() == 1)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-				for(Inimigo inimigo : inimigos_aux.values())
-				{
-					if(inimigo.getId() != 1 && inimigo.getId() != 3)
-					{
-						if(Simulacao.turno != 12)
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual > ENERGSOM + ENERG_ATAQUE_RES)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-						else
-						{
-							if(inimigo.getVida() > VIDA_INI_GRUA && energAtual >= ENERGGRUA)
-							{
-								energAtual -= ENERGGRUA;
-								inimigo.recebeDano(DANOGRUA);
-							}
-							else if(inimigo.getVida() > VIDA_INI_TOQUE && energAtual >= ENERGTOQUE)
-							{
-								energAtual -= ENERGTOQUE;
-								inimigo.recebeDano(DANOTOQUE);
-							}
-							else if(inimigo.getVida() > VIDA_INI_SOM && energAtual >= ENERGSOM)
-							{
-								energAtual -= ENERGSOM;
-								inimigo.recebeDano(DANOSOM);
-							}
-						}
-					}
-				}
-			}
-			score_aux = calculaScore(inimigos_aux, vidaAtual, energAtual);
+			score_aux = simulaTurno();
 			if(score_aux > score)
 			{
 				score = score_aux;
@@ -1533,7 +498,7 @@ public class Robo
 			System.out.println("Perfil sosom: Score = " + score_aux);
 		}
 		
-		if(score < 0 && energAtual >= 100)
+		if(score < 0 && energAtual >= 100 && vidaAtual <= 350)
 		{
 			estrategia("curamax");
 			System.out.println("Perfil curamax escolhido!\n");
@@ -1589,7 +554,258 @@ public class Robo
 		score -= p_vidaTotalInimigos * vidaTotalInimigos - p_danoTotalInimigos * danoTotalInimigos; //Retira ao score a vida e dano totais multiplicados pelos respetivos pesos
 		
 		if (vidaAtual - danoTotalInimigos <= 0) //Se o robo morrer na proxima defesa
-			score -= 10000; //Subtrai 10000 pontos, deixando o score negativo para indicar que morre
+			score -= 1000000; //Subtrai 1000000 pontos, deixando o score negativo para indicar que morre
+		return score;
+	}
+	
+	//Simula o restante do jogo e se possivel ganhar retorna uma estrategia vencedora
+	public String[] escolheEstrategiaJogo()
+	{
+		//Copia os valores originais para as variaveis a serem usadas nas simulacoes
+		a_vidaAtual = vidaAtual;
+		a_energAtual = energAtual;
+		a_inimigos = copiaTreemap(Simulacao.inimigos);
+		
+		//Variaveis locais
+		double scoreJogo = 0; //Score das simulacoes dos turnos restantes do robo
+		int numRondas = calculaNumRondas(); //Numero de turnos do robo
+		String estrategia[] = new String[numRondas]; //Array de strings que ira guardar os perfis da estrategia vencedora
+		ArrayList<String> jogos = new ArrayList<>(); //ArrayList que guarda as combinacoes de perfis a testar
+		ArrayList<Integer> aux = new ArrayList<>(); //ArrayList usado para gerar as combinacoes
+		//Valores usados para gerar as combinacoes
+		aux.add(1);
+		aux.add(2);
+		aux.add(3);
+		aux.add(4);
+		aux.add(5);
+		jogos = geraCombinacoes(calculaNumRondas(), aux); //Gera as combinacoes de perfis
+		
+		for(String perfis : jogos) //Para cada combinacao
+		{
+			scoreJogo = simulaJogo(perfis, numRondas); //Simula o jogo
+			if(scoreJogo > 0) //Se o score for positivo entao a estrategia indicada por "perfis" e vencedora
+			{
+				int i = 0;
+				while(i < perfis.length()) //Coloca os perfis a usar no array estrategia
+				{
+					switch (Integer.parseInt(perfis.toCharArray()[i] + "")) 
+					{
+						case 1:
+							estrategia[i] = "base";
+							break;
+						case 2:
+							estrategia[i] = "sosom";
+							break;
+						case 3:
+							estrategia[i] = "ataquemax";
+							break;
+						case 4:
+							estrategia[i] = "curamax";
+							break;
+						case 5:
+							estrategia[i] = "nada";
+							break;
+						default:
+							break;
+					}
+					i++;
+				}
+				//Jogo ja foi simulado e encontrada uma estrategia vencedora
+				Simulacao.jogoSimulado = true;
+				Simulacao.jogoGanho = true; 
+				break;
+			}
+			else //Se esta estrategia nao e vencedora da reset as variaveis de simulacao
+			{
+				scoreJogo = 0;
+				a_vidaAtual = vidaAtual;
+				a_energAtual = energAtual;
+				a_inimigos = copiaTreemap(Simulacao.inimigos);
+			}
+		}
+		Simulacao.jogoSimulado = true; //Indica que este jogo ja foi simulado
+		
+		//Reset as variaveis de simulacao
+		a_vidaAtual = vidaAtual;
+		a_energAtual = energAtual;
+		a_inimigos = copiaTreemap(Simulacao.inimigos);
+		return estrategia;
+	}
+	
+	//Simula um turno do robo usando variaveis auxiliares de simulacao
+	public double simulaTurno()
+	{
+		//Curar
+		if(a_vidaAtual < Robo.VIDA_CURAR)
+		{
+			if(a_energAtual >= ENERGCURA3 + ENERG_CURA_RES && a_vidaAtual <= VIDA_CURA_3)
+			{
+				a_vidaAtual += CURA3;
+				a_energAtual -= ENERGCURA3;
+			}
+			else if(a_energAtual >= ENERGCURA2 + ENERG_CURA_RES && a_vidaAtual <= VIDA_CURA_2)
+			{
+				a_vidaAtual += CURA2;
+				a_energAtual -= ENERGCURA2;
+			}
+			else if(a_energAtual >= ENERGCURA1 + ENERG_CURA_RES && a_vidaAtual <= VIDA_CURA_1)
+			{
+				a_vidaAtual += CURA1;
+				a_energAtual -= ENERGCURA1;
+			}
+		}
+		else //Atacar
+		{
+			for(Inimigo inimigo : a_inimigos.values())
+			{
+				if(inimigo.getId() == 1) //Tenta atacar primeiro as artilharias
+				{
+					if(Simulacao.turno != 12)
+					{
+						if(inimigo.getVida() > VIDA_INI_GRUA && a_energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
+						{
+							a_energAtual -= ENERGGRUA;
+							inimigo.recebeDano(DANOGRUA);
+						}
+						else if(inimigo.getVida() > VIDA_INI_TOQUE && a_energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
+						{
+							a_energAtual -= ENERGTOQUE;
+							inimigo.recebeDano(DANOTOQUE);
+						}
+						else if(inimigo.getVida() > VIDA_INI_SOM && a_energAtual > ENERGSOM + ENERG_ATAQUE_RES)
+						{
+							a_energAtual -= ENERGSOM;
+							inimigo.recebeDano(DANOSOM);
+						}
+					}
+					else
+					{
+						if(inimigo.getVida() > VIDA_INI_GRUA && a_energAtual >= ENERGGRUA)
+						{
+							a_energAtual -= ENERGGRUA;
+							inimigo.recebeDano(DANOGRUA);
+						}
+						else if(inimigo.getVida() > VIDA_INI_TOQUE && a_energAtual >= ENERGTOQUE)
+						{
+							a_energAtual -= ENERGTOQUE;
+							inimigo.recebeDano(DANOTOQUE);
+						}
+						else if(inimigo.getVida() > VIDA_INI_SOM && a_energAtual >= ENERGSOM)
+						{
+							a_energAtual -= ENERGSOM;
+							inimigo.recebeDano(DANOSOM);
+						}
+					}
+				}
+			}
+			for(Inimigo inimigo : a_inimigos.values())
+			{
+				if(inimigo.getId() != 1 && inimigo.getId() != 3) //Tenta atacar os restantes inimigos
+				{
+					if(Simulacao.turno != 12)
+					{
+						if(inimigo.getVida() > VIDA_INI_GRUA && a_energAtual > ENERGGRUA + ENERG_ATAQUE_RES)
+						{
+							a_energAtual -= ENERGGRUA;
+							inimigo.recebeDano(DANOGRUA);
+						}
+						else if(inimigo.getVida() > VIDA_INI_TOQUE && a_energAtual > ENERGTOQUE + ENERG_ATAQUE_RES)
+						{
+							a_energAtual -= ENERGTOQUE;
+							inimigo.recebeDano(DANOTOQUE);
+						}
+						else if(inimigo.getVida() > VIDA_INI_SOM && a_energAtual > ENERGSOM + ENERG_ATAQUE_RES)
+						{
+							a_energAtual -= ENERGSOM;
+							inimigo.recebeDano(DANOSOM);
+						}
+					}
+					else
+					{
+						if(inimigo.getVida() > VIDA_INI_GRUA && a_energAtual >= ENERGGRUA)
+						{
+							a_energAtual -= ENERGGRUA;
+							inimigo.recebeDano(DANOGRUA);
+						}
+						else if(inimigo.getVida() > VIDA_INI_TOQUE && a_energAtual >= ENERGTOQUE)
+						{
+							a_energAtual -= ENERGTOQUE;
+							inimigo.recebeDano(DANOTOQUE);
+						}
+						else if(inimigo.getVida() > VIDA_INI_SOM && a_energAtual >= ENERGSOM)
+						{
+							a_energAtual -= ENERGSOM;
+							inimigo.recebeDano(DANOSOM);
+						}
+					}
+				}
+			}
+		}
+		double score = calculaScore(a_inimigos, a_vidaAtual, a_energAtual); //Calcula o score usando as variaveis de simulacao
+		return score;
+	}
+	
+	//Simula um turno de defesa
+	public void simulaDefesa()
+	{
+		for(Inimigo inimigo : a_inimigos.values()) //Para cada inimigo
+		{
+			if (a_vidaAtual - inimigo.getDano() < 0) //Se o robo ficar com vida negativa
+	        {
+	            a_vidaAtual = 0; //Coloca a vida a 0
+	        } 
+	        else 
+	        {
+	            a_vidaAtual -= inimigo.getDano(); //Retira a vida perdida
+	        }
+		}
+	}
+	
+	//Simula o restante do jogo apos todos os inimigos serem detetados
+	public double simulaJogo(String perfis, int numRondas)
+	{
+		//Variaveis locais
+		double score = 0;
+		int i = 0;
+		
+		while(numRondas > 0 && a_vidaAtual > 0) //Enquanto houver turnos do robo para simular e o robo estiver vivo
+		{
+			switch (Integer.parseInt(perfis.toCharArray()[i] + ""))  //Aplica o perfil indicado na string da combinacao a testar
+			{
+				case 1:
+					estrategia("base");
+					break;
+				case 2:
+					estrategia("sosom");
+					break;
+				case 3:
+					estrategia("ataquemax");
+					break;
+				case 4:
+					estrategia("curamax");
+					break;
+				case 5:
+					estrategia("nada");
+					break;
+				default:
+					break;
+			}
+			i++;
+			if (i != 1 && a_vidaAtual > 0) //Se o robo estiver vivo
+	        {
+	            if ((a_energAtual * 1.5) <= ENERGMAX) //Se nao exceder a energia maxima
+	            {
+	                a_energAtual = (int) Math.round(a_energAtual * 1.5); //Recupera 50% da energia atual
+	            }
+	            else
+	            {
+	                a_energAtual = ENERGMAX; //Coloca a energia igual a energia maxima
+	            }
+	        }
+			score += simulaTurno(); //Simula o proximo turno do robo com a estrategia aplicada
+			simulaDefesa(); //Simula a proxima defesa do robo
+			numRondas--;
+		}
 		return score;
 	}
 	
@@ -1605,5 +821,63 @@ public class Robo
 			i++;
 		}
 		return copia;
+	}
+	
+	//Calcula o numero de turnos do robo restantes no jogo
+	public int calculaNumRondas()
+	{
+		if(Simulador.opcao == 3)
+		{
+			if((13 - Simulacao.turno * 2) % 2 == 0)
+				return ((13 - Simulacao.turno * 2) / 2);
+			else
+			{
+				return (int) ((13 - Simulacao.turno * 2) / 2) + 1;
+			}
+		}
+		else
+		{
+			if((13 - Simulacao.turno) % 2 == 0)
+				return ((13 - Simulacao.turno) / 2);
+			else
+			{
+				return (int) ((13 - Simulacao.turno) / 2) + 1;
+			}
+		}
+	}
+	
+	//Gera as combinacoes de perfis a testar pelo metodo simulaJogo
+	private static ArrayList<String> geraCombinacoes(int arraySize, ArrayList<Integer> possibleValues) //insere no arr2 todas as combinacoes de inimigos possiveis
+	{
+		ArrayList<String> jogos = new ArrayList<>();
+	    int carry;
+	    int[] indices = new int[arraySize];
+	    do
+	    {
+	    	String str = "";
+	        for(int index : indices)
+	        {
+	            str +=  possibleValues.get(index);
+	        }
+	        jogos.add(str); //Adiciona a combinacao ao ArrayList
+
+	        carry = 1;
+	        for(int i = indices.length - 1; i >= 0; i--)
+	        {
+	            if(carry == 0)
+	                break;
+
+	            indices[i] += carry;
+	            carry = 0;
+
+	            if(indices[i] == possibleValues.size())
+	            {
+	                carry = 1;
+	                indices[i] = 0;
+	            }
+	        }
+	    }
+	    while(carry != 1);
+	    return jogos;
 	}
 }

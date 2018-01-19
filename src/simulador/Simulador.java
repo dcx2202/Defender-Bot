@@ -23,6 +23,7 @@ public class Simulador
 	static File file = new File("simulacao.txt"); //Ficheiro onde guarda o resultado da simulacao de todos os jogos possiveis
 	static FileWriter fw;
 	static BufferedWriter bw;
+	static int opcao = 0;
     
     //Main
 	public static void main(String[] args) throws IOException
@@ -35,7 +36,7 @@ public class Simulador
         Scanner scan = new Scanner(System.in); //Que simulacao devera ser efetuada
         System.out.println("Que tipo de simulacao pretende?\n1- Caso aleatorio\n2- Caso especifico\n3- Varias simulacoes\n4- Todos os casos possiveis\n\nOpcao: ");
         
-        int opcao = scan.nextInt();
+        opcao = scan.nextInt();
         
         switch (opcao) 
         {
